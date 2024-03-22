@@ -10,8 +10,8 @@ public class StageManager : MonoBehaviour
     RecordAction recordAction;
 
     bool completed;
-    readonly int stages = 1;
-    int currentStage = 1;
+    readonly public int stages = 1;
+    public int currentStage = 1;
     public bool IsHeroStage
     {
         get
