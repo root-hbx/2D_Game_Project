@@ -22,7 +22,6 @@ public class IterControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Iter.currentStage);
         CurrentStage = Iter.currentStage;
         IterText.text = "Stage: " + CurrentStage + "/" + TotalStage;
     }
