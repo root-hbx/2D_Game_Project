@@ -6,6 +6,7 @@ public class MoveBehaviour : MonoBehaviour
 {
     public IInput input = new ActualInput();
     private HeroAnim heroAnim;
+    private GameObject indicator;
 
     const float kMoveSpeed = 12.0f;
     const float kJumpForce = 30.0f;
@@ -31,6 +32,12 @@ public class MoveBehaviour : MonoBehaviour
         Debug.Assert(heroAnim != null, "HeroAnim not found");
         rb = GetComponent<Rigidbody2D>();
         Debug.Assert(rb != null, "Rigidbody2D not found");
+        if (input is ActualInput)
+        {
+            indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
+            transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
+            Quaternion.identity);
+        }
     }
 
     // Update is called once per frame
@@ -40,7 +47,12 @@ public class MoveBehaviour : MonoBehaviour
         UpdateJump();
         BetterJump();
         UpdateCoyoTime();
+        
         input.ConsumeFrame();
+        if (indicator != null)
+        {
+            indicator.transform.position = transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0);
+        }
     }
 
     void UpdateMovement()
