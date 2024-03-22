@@ -7,8 +7,8 @@ public class MoveBehaviour : MonoBehaviour
     public IInput input = new ActualInput();
     private HeroAnim heroAnim;
 
-    readonly float moveSpeed = 80.0f;
-    readonly float jumpStrength = 30.0f;
+    readonly float moveSpeed = 8.0f;
+    readonly float jumpStrength = 15.0f;
 
     bool attemptJump = false;
     bool isJumping = false;
