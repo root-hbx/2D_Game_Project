@@ -14,7 +14,7 @@ public class ShootBehaviour : MonoBehaviour
     public IInput input = new ActualInput();
 
     float lastShootTime = 0;
-    readonly float shootInterval = 0.3f;
+    const float kShootInterval = 0.3f;
 
     // Update is called once per frame
     void Update()
@@ -30,7 +30,7 @@ public class ShootBehaviour : MonoBehaviour
 
         if (input.GetKey(InputKey.Space))
         {
-            if (Time.time - lastShootTime > shootInterval)
+            if (Time.time - lastShootTime > kShootInterval)
             {
                 lastShootTime = Time.time;
                 Shoot();

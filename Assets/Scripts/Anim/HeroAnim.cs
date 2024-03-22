@@ -7,50 +7,34 @@ public class HeroAnim : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
+
+    public bool IsRuning
+    {
+        get { return animator.GetBool("isRunning"); }
+        set { animator.SetBool("isRunning", value); }
+    }
+
+    public bool IsJumping
+    {
+        get { return animator.GetBool("isJumping"); }
+        set { animator.SetBool("isJumping", value); }
+    }
+
+    public bool IsFalling
+    {
+        get { return animator.GetBool("isFalling"); }
+        set { animator.SetBool("isFalling", value); }
+    }
+
+    public bool FlipX
+    {
+        get { return spriteRenderer.flipX; }
+        set { spriteRenderer.flipX = value; }
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
-    public enum HeroAnimCmd
-    {
-        TurnRight,
-        TurnLeft,
-        StopHorizontal,
-        Jumping,
-        Falling,
-        StopVertical,
-    }
-
-    // Update is called once per frame
-    public void SetAnim(HeroAnimCmd heroCmd)
-    {
-        switch (heroCmd)
-        {
-            case HeroAnimCmd.TurnRight:
-                spriteRenderer.flipX = false;
-                animator.SetBool("isRunning", true);
-                break;
-            case HeroAnimCmd.TurnLeft:
-                spriteRenderer.flipX = true;
-                animator.SetBool("isRunning", true);
-                break;
-            case HeroAnimCmd.StopHorizontal:
-                animator.SetBool("isRunning", false);
-                break;
-            case HeroAnimCmd.Jumping:
-                animator.SetBool("isJumping", true);
-                break;
-            case HeroAnimCmd.Falling:
-                animator.SetBool("isJumping", false);
-                animator.SetBool("isFalling", true);
-                break;
-            case HeroAnimCmd.StopVertical:
-                animator.SetBool("isJumping", false);
-                animator.SetBool("isFalling", false);
-                break;
-        }
-    }
-
 }

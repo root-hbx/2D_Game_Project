@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour
 {
-    readonly float moveSpeed = 20.0f;
+    const float kMoveSpeed = 20.0f;
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(moveSpeed * Time.smoothDeltaTime * Vector3.up);
+        transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.up);
 
         // destroy the egg if it goes off screen
         var screenPos = Camera.main.WorldToScreenPoint(transform.position);
