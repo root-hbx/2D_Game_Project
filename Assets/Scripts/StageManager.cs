@@ -21,7 +21,7 @@ public class StageManager : MonoBehaviour
     public Vector3 enemyPosition = new(0, 0, 0);
 
     List<List<InputKey>> enemyActions = new();
-    List<InputKey> heroActions;
+    List<List<InputKey>> heroActions = new();
 
     void Awake()
     {
@@ -41,6 +41,11 @@ public class StageManager : MonoBehaviour
         {
             StartStage();
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            BackStage();
+        }
     }
 
     #region Stage Complete Functions
@@ -56,7 +61,7 @@ public class StageManager : MonoBehaviour
         if (levelCompleted) { }
         else if (IsHeroStage)
         {
-            heroActions = recordAction.TakeActions();
+            heroActions.Add(recordAction.TakeActions());
         }
         else
         {
@@ -140,8 +145,8 @@ public class StageManager : MonoBehaviour
         if (levelCompleted)
         {
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
-            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions);
+            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             Debug.Log("Instantiate ai hero");
         }
         else if (IsHeroStage)
@@ -156,8 +161,8 @@ public class StageManager : MonoBehaviour
             Debug.Log("Instantiate enemy");
             enemy.GetComponent<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
-            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions);
+            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             Debug.Log("Instantiate ai hero");
         }
 
@@ -185,5 +190,38 @@ public class StageManager : MonoBehaviour
         recordAction.TakeActions();
         iterationCompleted = false;
         started = true;
+    }
+
+    void BackStage()
+    {
+        if (started)
+        {
+            StageCompleted();
+            if (levelCompleted)
+            {
+                stageSwitchUI.NextLevel();
+            }
+            return;
+        }
+
+        if (currentStage == 1)
+        {
+            return;
+        }
+
+        if (!levelCompleted)
+        {
+            currentStage--;
+        }
+        levelCompleted = false;
+        if (IsHeroStage)
+        {
+            heroActions.RemoveAt(heroActions.Count - 1);
+        }
+        else
+        {
+            enemyActions.RemoveAt(enemyActions.Count - 1);
+        }
+        StageCompleted();
     }
 }
