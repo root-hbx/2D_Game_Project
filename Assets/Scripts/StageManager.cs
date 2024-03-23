@@ -17,7 +17,7 @@ public class StageManager : MonoBehaviour
     public bool IsHeroStage => currentStage % 2 == 1;
 
     public Vector3 heroPosition = new(0, 0, 0);
-    public Vector3 enemyPosition = new(0, 0, 0);
+    public List<Vector3> enemyPosition = new();
 
     public Vector3 destinationPosition = new(0, 0, 0);
 
@@ -28,6 +28,7 @@ public class StageManager : MonoBehaviour
     {
         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
         Assert.IsNotNull(stageSwitchUI, "StageSwitchUI not found");
+        Assert.IsTrue(enemyPosition.Count == stages / 2, "Enemy positions not set correctly");
     }
 
     void Start()
@@ -133,7 +134,6 @@ public class StageManager : MonoBehaviour
         foreach (var hero in heroes)
         {
             hero.GetComponent<MoveBehaviour>().enabled = ableMove;
-            hero.GetComponent<ShootBehaviour>().enabled = ableMove;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -180,7 +180,6 @@ public class StageManager : MonoBehaviour
         {
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             Debug.Log("Instantiate ai hero");
         }
         else if (IsHeroStage)
@@ -191,18 +190,17 @@ public class StageManager : MonoBehaviour
         }
         else
         {
-            var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition, Quaternion.identity);
+            var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[currentStage / 2 - 1], Quaternion.identity);
             Debug.Log("Instantiate enemy");
             enemy.GetComponent<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             Debug.Log("Instantiate ai hero");
         }
 
         for (int i = 0; i < (currentStage + (levelCompleted ? 1 : 0) - 1) / 2; i++)
         {
-            var aiEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition, Quaternion.identity);
+            var aiEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[i], Quaternion.identity);
             aiEnemy.GetComponent<MoveBehaviour>().input = new RecordInput(enemyActions[i]);
             aiEnemy.GetComponent<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
             Debug.Log("Instantiate ai enemy");

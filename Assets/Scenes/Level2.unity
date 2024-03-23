@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &162905440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 162905442}
+  - component: {fileID: 162905441}
+  m_Layer: 0
+  m_Name: Global State
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &162905441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162905440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a261c42e7741cf9e18a6f55ff4b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &162905442
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162905440}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.459572, y: -6.6963625, z: -0.16409464}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &920695623
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +177,6 @@ GameObject:
   m_Component:
   - component: {fileID: 920695626}
   - component: {fileID: 920695625}
-  - component: {fileID: 920695624}
   m_Layer: 0
   m_Name: Stage Manager
   m_TagString: Untagged
@@ -141,18 +184,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &920695624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 920695623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6653b66862d584d5b8066e7757804bab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &920695625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +199,9 @@ MonoBehaviour:
   stages: 4
   currentStage: 1
   heroPosition: {x: -25, y: 12.5, z: 0}
-  enemyPosition: {x: 24, y: 12.5, z: 0}
+  enemyPosition:
+  - {x: 25, y: 12.5, z: 0}
+  - {x: 25, y: 12.5, z: 0}
   destinationPosition: {x: 0, y: -8.37, z: 0}
 --- !u!4 &920695626
 Transform:
@@ -27085,7 +27118,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1684753361}
-  - {fileID: 1407459241}
   - {fileID: 920695626}
   - {fileID: 1345840793}
+  - {fileID: 1407459241}
   - {fileID: 1491694561}
+  - {fileID: 162905442}

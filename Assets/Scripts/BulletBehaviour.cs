@@ -21,7 +21,16 @@ public class BulletBehaviour : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("Bullet")) return;
+
         Destroy(gameObject);
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(other.gameObject);
+            return;
+        }
+
         if (other.gameObject.CompareTag("Hero"))
         {
             var stageManager = FindObjectOfType<StageManager>();
