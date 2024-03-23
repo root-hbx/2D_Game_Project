@@ -7,6 +7,14 @@ using UnityEngine.Assertions;
 public class StageSwitchUI : MonoBehaviour
 {
     TMP_Text text;
+    public enum MessageType
+    {
+        Start,
+        Pass,
+        GameOver,
+        Undo,
+        NextLevel
+    }
 
     void Awake()
     {
@@ -15,22 +23,37 @@ public class StageSwitchUI : MonoBehaviour
         text.gameObject.SetActive(false);
     }
 
-    public void ShowStartIndicator(bool show)
-    {
-        Debug.Log("ShowStartIndicator" + show);
-        text.gameObject.SetActive(show);
-        text.text = "Press Enter to Start";
-    }
-
-    public void GameOver()
+    public void ShowContent(MessageType messageType)
     {
         text.gameObject.SetActive(true);
-        text.text = "Game Over. Press Enter to Restart";
+        switch (messageType)
+        {
+            case MessageType.Start:
+                text.text = "Press Enter to start";
+                break;
+            case MessageType.Pass:
+                text.text = "Passed! Press Enter to Continue";
+                break;
+            case MessageType.GameOver:
+                text.text = "Failed! Press Enter to Restart";
+                break;
+            case MessageType.Undo:
+                text.text = "Iter Undo. Press Enter to Continue";
+                break;
+            case MessageType.NextLevel:
+                text.text = "Congratulation! All Iterations Completed. Press Enter to Watch Replay";
+                break;
+        }
     }
 
-    public void NextLevel()
+    public void ShowContent(string message)
     {
         text.gameObject.SetActive(true);
-        text.text = "Congratulation! All Stages Completed. Press Enter to Watch Replay";
+        text.text = message;
+    }
+
+    public void StopShowContent()
+    {
+        text.gameObject.SetActive(false);
     }
 }

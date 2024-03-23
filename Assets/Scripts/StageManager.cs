@@ -20,6 +20,8 @@ public class StageManager : MonoBehaviour
     public Vector3 heroPosition = new(0, 0, 0);
     public Vector3 enemyPosition = new(0, 0, 0);
 
+    public Vector3 destinationPosition = new(0, 0, 0);
+
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
 
@@ -32,6 +34,7 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         recordAction = gameObject.AddComponent<RecordAction>();
+        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
         LoadStage();
     }
 
@@ -72,12 +75,13 @@ public class StageManager : MonoBehaviour
         {
             levelCompleted = true;
             StageCompleted();
-            stageSwitchUI.NextLevel();
+            stageSwitchUI.ShowContent(StageSwitchUI.MessageType.NextLevel);
             return;
         }
 
         currentStage++;
         StageCompleted();
+        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Pass);
     }
 
     public void GameOver()
@@ -88,16 +92,22 @@ public class StageManager : MonoBehaviour
         }
 
         StageCompleted();
-        stageSwitchUI.GameOver();
+        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.GameOver);
     }
     #endregion
+
+    IEnumerator DelayBeforeRemoveObjects()
+    {
+        yield return new WaitForSeconds(0.3f);
+        RemoveObjects();
+        LoadStage();
+    }
 
     void StageCompleted()
     {
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
-        RemoveObjects();
-        LoadStage();
+        StartCoroutine(DelayBeforeRemoveObjects());
     }
 
     void UpdateCharacterMoveState(bool ableMove)
@@ -135,6 +145,13 @@ public class StageManager : MonoBehaviour
         foreach (var bullet in bullets)
         {
             Destroy(bullet);
+        }
+
+        var dest = GameObject.FindGameObjectsWithTag("Destination");
+        foreach (var d in dest)
+        {
+
+            Destroy(d);
         }
     }
 
@@ -174,7 +191,9 @@ public class StageManager : MonoBehaviour
             Debug.Log("Instantiate ai enemy");
         }
         UpdateCharacterMoveState(false);
-        stageSwitchUI.ShowStartIndicator(true);
+
+        Instantiate(Resources.Load<GameObject>("Prefabs/Destination"), destinationPosition, Quaternion.identity);
+
         started = false;
     }
 
@@ -185,7 +204,7 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        stageSwitchUI.ShowStartIndicator(false);
+        stageSwitchUI.StopShowContent();
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
         iterationCompleted = false;
@@ -199,7 +218,7 @@ public class StageManager : MonoBehaviour
             StageCompleted();
             if (levelCompleted)
             {
-                stageSwitchUI.NextLevel();
+                stageSwitchUI.ShowContent(StageSwitchUI.MessageType.NextLevel);
             }
             return;
         }
@@ -222,6 +241,7 @@ public class StageManager : MonoBehaviour
         {
             enemyActions.RemoveAt(enemyActions.Count - 1);
         }
+        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Undo);
         StageCompleted();
     }
 }
