@@ -9,7 +9,7 @@ public class RecordAction : MonoBehaviour
     readonly ActualInput input = new();
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         InputKey action = 0;
 

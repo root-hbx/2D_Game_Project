@@ -8,6 +8,7 @@ public class GlobalState : MonoBehaviour
     {
         Screen.SetResolution(1920, 1200, true);
         Application.targetFrameRate = 60;
+        Time.fixedDeltaTime = 1f / 60f;
     }
 
     void Update()

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -209,6 +208,7 @@ public class StageManager : MonoBehaviour
         recordAction.TakeActions();
         iterationCompleted = false;
         started = true;
+        Random.InitState(42);
     }
 
     void BackStage()

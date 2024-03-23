@@ -11,6 +11,7 @@ public class MoveBehaviour : MonoBehaviour
 
     const float kMoveAcceleration = 80.0f;
     const float kMaxMoveSpeed = 10.0f;
+    // Each deep jump is 7 units high
     const float kJumpForce = 30.0f;
 
     Rigidbody2D rb;
@@ -30,8 +31,7 @@ public class MoveBehaviour : MonoBehaviour
         Assert.IsNotNull(rb, "Rigidbody2D not found");
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         UpdateMovement();
         BetterMovement();
@@ -66,7 +66,7 @@ public class MoveBehaviour : MonoBehaviour
 
         if (moveDir != 0)
         {
-            rb.AddForce(new Vector2(moveDir * kMoveAcceleration, 0));
+            rb.AddForce(new Vector2(moveDir * kMoveAcceleration, 0), ForceMode2D.Impulse);
             if (!heroAnim.IsJumping)
             {
                 heroAnim.IsRuning = true;
@@ -88,7 +88,6 @@ public class MoveBehaviour : MonoBehaviour
         {
             if (IsGrounded || leftGroundCoyoteTime + kCoyoteTime > Time.time)
             {
-                Debug.Log("Jump");
                 heroAnim.IsJumping = true;
                 rb.velocity = new Vector2(rb.velocity.x, kJumpForce);
                 StartCoroutine(nameof(StopJumpAnime));
