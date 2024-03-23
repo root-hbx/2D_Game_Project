@@ -9,6 +9,9 @@ public enum InputKey
     A = 1 << 1,
     S = 1 << 2,
     D = 1 << 3,
+    /// <summary>
+    /// Represents Attack. Now the Actual Space Key is not used for Attack anymore, but jump (as W key). 
+    /// </summary>
     Space = 1 << 4,
 }
 
@@ -50,7 +53,7 @@ public class ActualInput : IInput
         switch (key)
         {
             case InputKey.W:
-                return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+                return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.K);
             case InputKey.A:
                 return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
             case InputKey.S:
@@ -58,7 +61,7 @@ public class ActualInput : IInput
             case InputKey.D:
                 return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
             case InputKey.Space:
-                return Input.GetKey(KeyCode.Space);
+                return Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J);
             default:
                 return false;
         }
