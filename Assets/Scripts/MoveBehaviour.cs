@@ -8,7 +8,7 @@ public class MoveBehaviour : MonoBehaviour
     private HeroAnim heroAnim;
     private GameObject indicator;
 
-    const float kMoveAcceleration = 100.0f;
+    const float kMoveAcceleration = 80.0f;
     const float kMaxMoveSpeed = 10.0f;
     const float kJumpForce = 30.0f;
 
@@ -19,13 +19,7 @@ public class MoveBehaviour : MonoBehaviour
     const float kCoyoteTime = 0.1f;
     float leftGroundCoyoteTime = 0;
 
-    bool IsGrounded
-    {
-        get
-        {
-            return Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
-        }
-    }
+    bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
     void Start()
     {
