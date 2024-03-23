@@ -1,21 +1,5 @@
-# Unity Game Demo (WIP)
+# Introduction to 2D Game Development
+## COMP561405 游戏设计与开发
 
-## Tasks
-- Art:
-  - [ ] Sound effects
-  - [ ] Music
-  - [ ] Character animations
-  - [ ] Textures for characters
-  - [ ] Textures for maps
-  - [ ] Textures for elements, e.g. traps, triggers, bullets, etc
-
-- Mechanics:
-  - [ ] Optimize jump, move, shoot, etc
-  - [ ] More levels
-  - [ ] More elements, e.g. traps, triggers, etc
-
-- Code:
-  - [ ] Statistics about time, deads, score, etc
-  - [ ] UI for loading, settings, etc
-  - [ ] pause menu
-  - [ ] rollback to previous checkpoint
+- This course will be taught based on the Unity3D game engine
+- This course is offered by Prof.[Kelvin Sung (宋賢清)](https://faculty.washington.edu/ksung/)
