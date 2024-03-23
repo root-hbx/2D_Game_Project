@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class HeroAnim : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class HeroAnim : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        Assert.IsNotNull(animator, "Animator not found");
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Assert.IsNotNull(spriteRenderer, "SpriteRenderer not found");
     }
 }

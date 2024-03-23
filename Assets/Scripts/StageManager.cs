@@ -4,17 +4,14 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// LoadStage() -> NextStage() or GameOver() being called -> Call LoadStage() again
-/// Callable functions: NextStage(), GameOver()
-/// </summary>
 public class StageManager : MonoBehaviour
 {
     StageSwitchUI stageSwitchUI;
     RecordAction recordAction;
 
-    bool completed;
     bool started;
+    bool iterationCompleted;
+    bool levelCompleted;
 
     public int stages = 1;
     public int currentStage = 1;
@@ -29,12 +26,13 @@ public class StageManager : MonoBehaviour
     void Awake()
     {
         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
+        Assert.IsNotNull(stageSwitchUI, "StageSwitchUI not found");
     }
 
     void Start()
     {
-        LoadStage();
         recordAction = gameObject.AddComponent<RecordAction>();
+        LoadStage();
     }
 
     void Update()
@@ -48,20 +46,15 @@ public class StageManager : MonoBehaviour
     #region Stage Complete Functions
     public void NextStage()
     {
-        if (completed)
+        if (iterationCompleted)
         {
             return;
         }
 
         Assert.IsTrue(currentStage <= stages);
-        if (currentStage == stages)
-        {
-            StageCompleted();
-            stageSwitchUI.NextLevel();
-            return;
-        }
 
-        if (IsHeroStage)
+        if (levelCompleted) { }
+        else if (IsHeroStage)
         {
             heroActions = recordAction.TakeActions();
         }
@@ -70,13 +63,21 @@ public class StageManager : MonoBehaviour
             enemyActions.Add(recordAction.TakeActions());
         }
 
+        if (currentStage == stages)
+        {
+            levelCompleted = true;
+            StageCompleted();
+            stageSwitchUI.NextLevel();
+            return;
+        }
+
         currentStage++;
         StageCompleted();
     }
 
     public void GameOver()
     {
-        if (completed)
+        if (iterationCompleted)
         {
             return;
         }
@@ -88,7 +89,7 @@ public class StageManager : MonoBehaviour
 
     void StageCompleted()
     {
-        completed = true;
+        iterationCompleted = true;
         UpdateCharacterMoveState(false);
         RemoveObjects();
         LoadStage();
@@ -124,27 +125,43 @@ public class StageManager : MonoBehaviour
         {
             Destroy(enemy);
         }
+
+        var bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        foreach (var bullet in bullets)
+        {
+            Destroy(bullet);
+        }
     }
 
     void LoadStage()
     {
         Debug.Log("Stage " + currentStage);
-        if (IsHeroStage)
+
+        if (levelCompleted)
         {
-            Instantiate(Resources.Load("Prefabs/Hero"), heroPosition, Quaternion.identity);
+            var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
+            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions);
+            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions);
+            Debug.Log("Instantiate ai hero");
+        }
+        else if (IsHeroStage)
+        {
+            var hero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             Debug.Log("Instantiate hero");
+            hero.GetComponent<MoveBehaviour>().AddIndicator();
         }
         else
         {
-            Instantiate(Resources.Load("Prefabs/Enemy"), enemyPosition, Quaternion.identity);
+            var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition, Quaternion.identity);
             Debug.Log("Instantiate enemy");
+            enemy.GetComponent<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions);
             aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions);
             Debug.Log("Instantiate ai hero");
         }
 
-        for (int i = 0; i < (currentStage - 1) / 2; i++)
+        for (int i = 0; i < (currentStage + (levelCompleted ? 1 : 0) - 1) / 2; i++)
         {
             var aiEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition, Quaternion.identity);
             aiEnemy.GetComponent<MoveBehaviour>().input = new RecordInput(enemyActions[i]);
@@ -153,6 +170,7 @@ public class StageManager : MonoBehaviour
         }
         UpdateCharacterMoveState(false);
         stageSwitchUI.ShowStartIndicator(true);
+        started = false;
     }
 
     void StartStage()
@@ -165,6 +183,7 @@ public class StageManager : MonoBehaviour
         stageSwitchUI.ShowStartIndicator(false);
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
-        completed = false;
+        iterationCompleted = false;
+        started = true;
     }
 }

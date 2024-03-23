@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StageSwitchUI : MonoBehaviour
 {
@@ -13,7 +11,7 @@ public class StageSwitchUI : MonoBehaviour
     void Awake()
     {
         text = GetComponentInChildren<TMP_Text>();
-        Assert.IsNotNull(text);
+        Assert.IsNotNull(text, "Text not found");
         text.gameObject.SetActive(false);
     }
 
@@ -27,12 +25,12 @@ public class StageSwitchUI : MonoBehaviour
     public void GameOver()
     {
         text.gameObject.SetActive(true);
-        text.text = "Game Over";
+        text.text = "Game Over. Press Enter to Restart";
     }
 
     public void NextLevel()
     {
         text.gameObject.SetActive(true);
-        text.text = "Congratulation! All Stages Completed";
+        text.text = "Congratulation! All Stages Completed. Press Enter to Watch Replay";
     }
 }

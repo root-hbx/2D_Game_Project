@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class MoveBehaviour : MonoBehaviour
 {
@@ -24,15 +25,9 @@ public class MoveBehaviour : MonoBehaviour
     void Start()
     {
         heroAnim = GetComponent<HeroAnim>();
-        Debug.Assert(heroAnim != null, "HeroAnim not found");
+        Assert.IsNotNull(heroAnim, "HeroAnim not found");
         rb = GetComponent<Rigidbody2D>();
-        Debug.Assert(rb != null, "Rigidbody2D not found");
-        if (input is ActualInput)
-        {
-            indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
-            transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
-            Quaternion.identity, transform);
-        }
+        Assert.IsNotNull(rb, "Rigidbody2D not found");
     }
 
     // Update is called once per frame
@@ -129,5 +124,12 @@ public class MoveBehaviour : MonoBehaviour
         {
             leftGroundCoyoteTime = Time.time;
         }
+    }
+
+    public void AddIndicator()
+    {
+        indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
+            transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
+            Quaternion.identity, transform);
     }
 }
