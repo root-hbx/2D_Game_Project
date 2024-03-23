@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,9 +10,7 @@ public class StageSwitchUI : MonoBehaviour
 {
     static StageSwitchUI instance;
 
-    GameObject panel;
-    TMP_Text text;
-    Button button;
+    TMP_Text text = null;
 
     void Awake()
     {
@@ -19,9 +18,8 @@ public class StageSwitchUI : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            panel = GetComponentInChildren<Image>().gameObject;
-            text = GetComponentInChildren<TMP_Text>();
-            button = GetComponentInChildren<Button>();
+            text = GetComponentInChildren<TMP_Text>(true);
+            Debug.Assert(text != null, "Text not found");
         }
         else
         {
@@ -33,39 +31,25 @@ public class StageSwitchUI : MonoBehaviour
     // Start is called before the first frame update
     void Disable()
     {
-        panel.SetActive(false);
         text.gameObject.SetActive(false);
-        button.gameObject.SetActive(false);
-        button.onClick.AddListener(OnClick);
     }
 
-    public void NextStage(int stage)
+    public void ShowStartIndicator(bool show)
     {
-        panel.SetActive(true);
-        text.gameObject.SetActive(true);
-        text.text = $"Congratulation! Stage {stage} Completed";
-        button.gameObject.SetActive(true);
-        button.GetComponentInChildren<TMP_Text>().text = "Next Stage";
+        Debug.Log("ShowStartIndicator" + show);
+        text.gameObject.SetActive(show);
+        text.text = "Press Enter to Start";
     }
 
     public void GameOver()
     {
-        panel.SetActive(true);
         text.gameObject.SetActive(true);
         text.text = "Game Over";
-        button.gameObject.SetActive(true);
-        button.GetComponentInChildren<TMP_Text>().text = "Restart";
     }
 
     public void NextLevel()
     {
-        panel.SetActive(true);
         text.gameObject.SetActive(true);
         text.text = "Congratulation! All Stages Completed";
-    }
-
-    void OnClick()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

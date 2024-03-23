@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// LoadStage() -> NextStage() or GameOver() being called -> Call LoadStage() again
+/// Callable functions: NextStage(), GameOver()
+/// </summary>
 public class StageManager : MonoBehaviour
 {
     static StageManager instance;
@@ -19,27 +24,33 @@ public class StageManager : MonoBehaviour
             return currentStage % 2 == 1;
         }
     }
+    private bool readyToStart = false;
 
-    public Vector3 heroPosition = new Vector3(0, 0, 0);
-    public Vector3 enemyPosition = new Vector3(0, 0, 0);
+    public Vector3 heroPosition = new(0, 0, 0);
+    public Vector3 enemyPosition = new(0, 0, 0);
 
     List<List<InputKey>> enemyActions = new();
     List<InputKey> heroActions;
 
-    void Awake()
+    // void Awake()
+    // {
+    //     if (instance == null)
+    //     {
+    //         instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
+    //         recordAction = FindObjectOfType<RecordAction>();
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //         instance.LoadStage();
+    //     }
+    // }
+
+    void Start()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            stageSwitchUI = FindObjectOfType<StageSwitchUI>();
-            recordAction = FindObjectOfType<RecordAction>();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        instance.LoadStage();
+        LoadStage();
     }
 
     public void NextStage()
@@ -67,7 +78,6 @@ public class StageManager : MonoBehaviour
         }
 
         StageCompleted();
-        stageSwitchUI.NextStage(currentStage);
         currentStage++;
     }
 
@@ -86,22 +96,37 @@ public class StageManager : MonoBehaviour
     {
         completed = true;
         DisableMove();
+        removeObjects();
     }
 
-    void DisableMove()
+    void DisableMove(bool isDisabling = false)
     {
         var heroes = GameObject.FindGameObjectsWithTag("Hero");
         foreach (var hero in heroes)
         {
-            hero.GetComponent<MoveBehaviour>().enabled = false;
-            hero.GetComponent<ShootBehaviour>().enabled = false;
+            hero.GetComponent<MoveBehaviour>().enabled = isDisabling;
+            hero.GetComponent<ShootBehaviour>().enabled = isDisabling;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<MoveBehaviour>().enabled = false;
-            enemy.GetComponent<ShootBehaviour>().enabled = false;
+            enemy.GetComponent<MoveBehaviour>().enabled = isDisabling;
+            enemy.GetComponent<ShootBehaviour>().enabled = isDisabling;
+        }
+    }
+    void removeObjects()
+    {
+        var heroes = GameObject.FindGameObjectsWithTag("Hero");
+        foreach (var hero in heroes)
+        {
+            Destroy(hero);
+        }
+
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy);
         }
     }
 
@@ -130,8 +155,26 @@ public class StageManager : MonoBehaviour
             aiEnemy.GetComponent<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
             Debug.Log("Instantiate ai enemy");
         }
+        DisableMove();
+        stageSwitchUI.ShowStartIndicator(true);
+        readyToStart = true;
+        // now wait for the return key to call StartStage()
+    }
+    void StartStage()
+    {
+        if (readyToStart)
+        {
+            stageSwitchUI.ShowStartIndicator(false);
+            DisableMove(true);
+            recordAction.TakeActions();
+            completed = false;
+        }
+    }
 
-        recordAction.TakeActions();
-        completed = false;
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartStage();
+        }
     }
 }
