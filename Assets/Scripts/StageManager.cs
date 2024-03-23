@@ -2,46 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// LoadStage() -> NextStage() or GameOver() being called -> Call LoadStage() again
+/// Callable functions: NextStage(), GameOver()
+/// </summary>
 public class StageManager : MonoBehaviour
 {
-    static StageManager instance;
     StageSwitchUI stageSwitchUI;
     RecordAction recordAction;
 
     bool completed;
+    bool started;
+
     public int stages = 1;
     public int currentStage = 1;
-    public bool IsHeroStage
-    {
-        get
-        {
-            return currentStage % 2 == 1;
-        }
-    }
+    public bool IsHeroStage => currentStage % 2 == 1;
 
-    public Vector3 heroPosition = new Vector3(0, 0, 0);
-    public Vector3 enemyPosition = new Vector3(0, 0, 0);
+    public Vector3 heroPosition = new(0, 0, 0);
+    public Vector3 enemyPosition = new(0, 0, 0);
 
     List<List<InputKey>> enemyActions = new();
     List<InputKey> heroActions;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            stageSwitchUI = FindObjectOfType<StageSwitchUI>();
-            recordAction = FindObjectOfType<RecordAction>();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        instance.LoadStage();
+        stageSwitchUI = FindObjectOfType<StageSwitchUI>();
     }
 
+    void Start()
+    {
+        LoadStage();
+        recordAction = gameObject.AddComponent<RecordAction>();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartStage();
+        }
+    }
+
+    #region Stage Complete Functions
     public void NextStage()
     {
         if (completed)
@@ -66,9 +70,8 @@ public class StageManager : MonoBehaviour
             enemyActions.Add(recordAction.TakeActions());
         }
 
-        StageCompleted();
-        stageSwitchUI.NextStage(currentStage);
         currentStage++;
+        StageCompleted();
     }
 
     public void GameOver()
@@ -81,27 +84,45 @@ public class StageManager : MonoBehaviour
         StageCompleted();
         stageSwitchUI.GameOver();
     }
+    #endregion
 
     void StageCompleted()
     {
         completed = true;
-        DisableMove();
+        UpdateCharacterMoveState(false);
+        RemoveObjects();
+        LoadStage();
     }
 
-    void DisableMove()
+    void UpdateCharacterMoveState(bool ableMove)
     {
         var heroes = GameObject.FindGameObjectsWithTag("Hero");
         foreach (var hero in heroes)
         {
-            hero.GetComponent<MoveBehaviour>().enabled = false;
-            hero.GetComponent<ShootBehaviour>().enabled = false;
+            hero.GetComponent<MoveBehaviour>().enabled = ableMove;
+            hero.GetComponent<ShootBehaviour>().enabled = ableMove;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<MoveBehaviour>().enabled = false;
-            enemy.GetComponent<ShootBehaviour>().enabled = false;
+            enemy.GetComponent<MoveBehaviour>().enabled = ableMove;
+            enemy.GetComponent<ShootBehaviour>().enabled = ableMove;
+        }
+    }
+
+    void RemoveObjects()
+    {
+        var heroes = GameObject.FindGameObjectsWithTag("Hero");
+        foreach (var hero in heroes)
+        {
+            Destroy(hero);
+        }
+
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy);
         }
     }
 
@@ -130,7 +151,19 @@ public class StageManager : MonoBehaviour
             aiEnemy.GetComponent<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
             Debug.Log("Instantiate ai enemy");
         }
+        UpdateCharacterMoveState(false);
+        stageSwitchUI.ShowStartIndicator(true);
+    }
 
+    void StartStage()
+    {
+        if (started)
+        {
+            return;
+        }
+
+        stageSwitchUI.ShowStartIndicator(false);
+        UpdateCharacterMoveState(true);
         recordAction.TakeActions();
         completed = false;
     }
