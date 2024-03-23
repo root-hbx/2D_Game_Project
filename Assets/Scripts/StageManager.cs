@@ -106,7 +106,25 @@ public class StageManager : MonoBehaviour
     {
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
+        PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());
+    }
+
+    void PlayDisappearingAnimation()
+    {
+        var heroes = GameObject.FindGameObjectsWithTag("Hero");
+        foreach (var hero in heroes)
+        {
+            hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            hero.GetComponent<Animator>().SetTrigger("Disappear");
+        }
+
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            enemy.GetComponent<Animator>().SetTrigger("Disappear");
+        }
     }
 
     void UpdateCharacterMoveState(bool ableMove)
