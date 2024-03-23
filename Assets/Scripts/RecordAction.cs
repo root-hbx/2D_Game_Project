@@ -5,21 +5,8 @@ using UnityEngine;
 
 public class RecordAction : MonoBehaviour
 {
-    static RecordAction instance;
     List<InputKey> recordActions = new();
     readonly ActualInput input = new();
-
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     // Update is called once per frame
     void Update()

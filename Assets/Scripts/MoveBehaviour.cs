@@ -8,7 +8,8 @@ public class MoveBehaviour : MonoBehaviour
     private HeroAnim heroAnim;
     private GameObject indicator;
 
-    const float kMoveSpeed = 12.0f;
+    const float kMoveAcceleration = 100.0f;
+    const float kMaxMoveSpeed = 10.0f;
     const float kJumpForce = 30.0f;
 
     Rigidbody2D rb;
@@ -36,7 +37,7 @@ public class MoveBehaviour : MonoBehaviour
         {
             indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
             transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
-            Quaternion.identity);
+            Quaternion.identity, transform);
         }
     }
 
@@ -44,10 +45,11 @@ public class MoveBehaviour : MonoBehaviour
     void Update()
     {
         UpdateMovement();
+        BetterMovement();
         UpdateJump();
         BetterJump();
         UpdateCoyoTime();
-        
+
         input.ConsumeFrame();
         if (indicator != null)
         {
@@ -57,27 +59,37 @@ public class MoveBehaviour : MonoBehaviour
 
     void UpdateMovement()
     {
+        int moveDir = 0;
         if (input.GetKey(InputKey.A))
         {
-            transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.left);
+            moveDir = -1;
             heroAnim.FlipX = true;
-            if (!heroAnim.IsJumping)
-            {
-                heroAnim.IsRuning = true;
-            }
         }
         else if (input.GetKey(InputKey.D))
         {
-            transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.right);
+            moveDir = 1;
             heroAnim.FlipX = false;
-            if (!heroAnim.IsJumping)
-            {
-                heroAnim.IsRuning = true;
-            }
         }
         else
         {
             heroAnim.IsRuning = false;
+        }
+
+        if (moveDir != 0)
+        {
+            rb.AddForce(new Vector2(moveDir * kMoveAcceleration, 0));
+            if (!heroAnim.IsJumping)
+            {
+                heroAnim.IsRuning = true;
+            }
+        }
+    }
+
+    void BetterMovement()
+    {
+        if (Mathf.Abs(rb.velocity.x) > kMaxMoveSpeed)
+        {
+            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * kMaxMoveSpeed, rb.velocity.y);
         }
     }
 

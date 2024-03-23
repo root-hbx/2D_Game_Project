@@ -8,29 +8,12 @@ using UnityEngine.UI;
 
 public class StageSwitchUI : MonoBehaviour
 {
-    static StageSwitchUI instance;
-
-    TMP_Text text = null;
+    TMP_Text text;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            text = GetComponentInChildren<TMP_Text>(true);
-            Debug.Assert(text != null, "Text not found");
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        instance.Disable();
-    }
-
-    // Start is called before the first frame update
-    void Disable()
-    {
+        text = GetComponentInChildren<TMP_Text>();
+        Assert.IsNotNull(text);
         text.gameObject.SetActive(false);
     }
 

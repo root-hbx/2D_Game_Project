@@ -10,21 +10,15 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class StageManager : MonoBehaviour
 {
-    static StageManager instance;
     StageSwitchUI stageSwitchUI;
     RecordAction recordAction;
 
     bool completed;
+    bool started;
+
     public int stages = 1;
     public int currentStage = 1;
-    public bool IsHeroStage
-    {
-        get
-        {
-            return currentStage % 2 == 1;
-        }
-    }
-    private bool readyToStart = false;
+    public bool IsHeroStage => currentStage % 2 == 1;
 
     public Vector3 heroPosition = new(0, 0, 0);
     public Vector3 enemyPosition = new(0, 0, 0);
@@ -32,27 +26,26 @@ public class StageManager : MonoBehaviour
     List<List<InputKey>> enemyActions = new();
     List<InputKey> heroActions;
 
-    // void Awake()
-    // {
-    //     if (instance == null)
-    //     {
-    //         instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
-    //         recordAction = FindObjectOfType<RecordAction>();
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //         instance.LoadStage();
-    //     }
-    // }
+    void Awake()
+    {
+        stageSwitchUI = FindObjectOfType<StageSwitchUI>();
+    }
 
     void Start()
     {
         LoadStage();
+        recordAction = gameObject.AddComponent<RecordAction>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartStage();
+        }
+    }
+
+    #region Stage Complete Functions
     public void NextStage()
     {
         if (completed)
@@ -77,8 +70,8 @@ public class StageManager : MonoBehaviour
             enemyActions.Add(recordAction.TakeActions());
         }
 
-        StageCompleted();
         currentStage++;
+        StageCompleted();
     }
 
     public void GameOver()
@@ -91,31 +84,34 @@ public class StageManager : MonoBehaviour
         StageCompleted();
         stageSwitchUI.GameOver();
     }
+    #endregion
 
     void StageCompleted()
     {
         completed = true;
-        DisableMove();
-        removeObjects();
+        UpdateCharacterMoveState(false);
+        RemoveObjects();
+        LoadStage();
     }
 
-    void DisableMove(bool isDisabling = false)
+    void UpdateCharacterMoveState(bool ableMove)
     {
         var heroes = GameObject.FindGameObjectsWithTag("Hero");
         foreach (var hero in heroes)
         {
-            hero.GetComponent<MoveBehaviour>().enabled = isDisabling;
-            hero.GetComponent<ShootBehaviour>().enabled = isDisabling;
+            hero.GetComponent<MoveBehaviour>().enabled = ableMove;
+            hero.GetComponent<ShootBehaviour>().enabled = ableMove;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<MoveBehaviour>().enabled = isDisabling;
-            enemy.GetComponent<ShootBehaviour>().enabled = isDisabling;
+            enemy.GetComponent<MoveBehaviour>().enabled = ableMove;
+            enemy.GetComponent<ShootBehaviour>().enabled = ableMove;
         }
     }
-    void removeObjects()
+
+    void RemoveObjects()
     {
         var heroes = GameObject.FindGameObjectsWithTag("Hero");
         foreach (var hero in heroes)
@@ -155,26 +151,20 @@ public class StageManager : MonoBehaviour
             aiEnemy.GetComponent<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
             Debug.Log("Instantiate ai enemy");
         }
-        DisableMove();
+        UpdateCharacterMoveState(false);
         stageSwitchUI.ShowStartIndicator(true);
-        readyToStart = true;
-        // now wait for the return key to call StartStage()
-    }
-    void StartStage()
-    {
-        if (readyToStart)
-        {
-            stageSwitchUI.ShowStartIndicator(false);
-            DisableMove(true);
-            recordAction.TakeActions();
-            completed = false;
-        }
     }
 
-    void Update(){
-        if (Input.GetKeyDown(KeyCode.Return))
+    void StartStage()
+    {
+        if (started)
         {
-            StartStage();
+            return;
         }
+
+        stageSwitchUI.ShowStartIndicator(false);
+        UpdateCharacterMoveState(true);
+        recordAction.TakeActions();
+        completed = false;
     }
 }
