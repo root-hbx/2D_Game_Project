@@ -26595,6 +26595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953ee776e84c24d3395c31b7604c1d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stages: 4
   currentStage: 1
   heroPosition: {x: -28, y: 1.5, z: 0}
   enemyPosition: {x: 27, y: 1.5, z: 0}
