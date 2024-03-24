@@ -30,6 +30,8 @@ public class StageManager : MonoBehaviour
         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
         Assert.IsNotNull(stageSwitchUI, "StageSwitchUI not found");
         Assert.IsTrue(enemyPosition.Count == stages / 2, "Enemy positions not set correctly");
+        cooldownBar = GetComponent<CooldownBar>();
+        Assert.IsNotNull(cooldownBar, "CooldownBar not found");
     }
 
     void Start()
@@ -37,7 +39,6 @@ public class StageManager : MonoBehaviour
         recordAction = gameObject.AddComponent<RecordAction>();
         stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
         LoadStage();
-        cooldownBar = GetComponent<CooldownBar>();
     }
 
     void Update()
