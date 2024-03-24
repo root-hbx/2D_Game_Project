@@ -11,7 +11,6 @@ public class MoveBehaviour : MonoBehaviour
 
     public IInput input = new ActualInput();
 
-    const float kMoveAcceleration = 80.0f;
     const float kMaxMoveSpeed = 10.0f;
     const float kJumpForce = 37.0f;     // Each deep jump is 7 units high
     const float kFallMultiplier = 8f;
@@ -34,7 +33,7 @@ public class MoveBehaviour : MonoBehaviour
     void FixedUpdate()
     {
         UpdateMovement();
-        BetterMovement();
+        // BetterMovement();
         UpdateJump();
         BetterJump();
         UpdateGroundTime();
@@ -61,24 +60,16 @@ public class MoveBehaviour : MonoBehaviour
         }
         else
         {
-            heroAnim.IsRuning = false;
+            heroAnim.IsRunning = false;
         }
 
+        rigidBody.velocity = new Vector2(moveDir * kMaxMoveSpeed, rigidBody.velocity.y);
         if (moveDir != 0)
         {
-            rigidBody.AddForce(new Vector2(moveDir * kMoveAcceleration, 0), ForceMode2D.Impulse);
             if (!heroAnim.IsJumping)
             {
-                heroAnim.IsRuning = true;
+                heroAnim.IsRunning = true;
             }
-        }
-    }
-
-    void BetterMovement()
-    {
-        if (Mathf.Abs(rigidBody.velocity.x) > kMaxMoveSpeed)
-        {
-            rigidBody.velocity = new Vector2(Mathf.Sign(rigidBody.velocity.x) * kMaxMoveSpeed, rigidBody.velocity.y);
         }
     }
 

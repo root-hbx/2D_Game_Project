@@ -9,7 +9,7 @@ public class HeroAnim : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
 
-    public bool IsRuning
+    public bool IsRunning
     {
         get { return animator.GetBool("isRunning"); }
         set { animator.SetBool("isRunning", value); }
