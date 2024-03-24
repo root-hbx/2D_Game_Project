@@ -22,6 +22,7 @@ public class BulletBehaviour : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Bullet")) return;
+        if (other.gameObject.CompareTag("Portal")) return;
 
         Destroy(gameObject);
 
