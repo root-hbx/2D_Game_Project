@@ -9,7 +9,7 @@ public class GlobalState : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetConfig()
     {
-        Screen.SetResolution(1920, 1200, true);
+        Screen.SetResolution(1920, 1200, false);
         Application.targetFrameRate = 60;
         Time.fixedDeltaTime = 1f / 60f;
     }
