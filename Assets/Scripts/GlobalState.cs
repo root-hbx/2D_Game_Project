@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GlobalState : MonoBehaviour
 {
-    void Start()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void SetConfig()
     {
         Screen.SetResolution(1920, 1200, true);
         Application.targetFrameRate = 60;
@@ -13,7 +14,7 @@ public class GlobalState : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             Application.Quit();
         }

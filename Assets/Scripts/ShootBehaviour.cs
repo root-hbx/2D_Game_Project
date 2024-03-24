@@ -44,7 +44,7 @@ public class ShootBehaviour : MonoBehaviour
         // the bullet should outside the player
         Vector3 bulletPosition = transform.position;
         Bounds bounds = GetComponent<Renderer>().bounds;
-        bulletPosition.x += (direction == Direction.Right ? 1 : -1) * (bounds.size.x + 1);
+        bulletPosition.x += (direction == Direction.Right ? 1 : -1) * (bounds.size.x + 0.5f);
         bulletPosition.y += bounds.size.y / 2;
         float rotateAngle = direction == Direction.Right ? -90 : 90;
         Instantiate(Resources.Load("Prefabs/Bullet"), bulletPosition, Quaternion.Euler(0, 0, rotateAngle));
