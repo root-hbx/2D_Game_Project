@@ -6,7 +6,6 @@ public class BulletBehaviour : MonoBehaviour
 {
     const float kMoveSpeed = 20.0f;
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.up);
@@ -34,14 +33,14 @@ public class BulletBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            var iterationManager = FindObjectOfType<IterationManager>();
+            if (iterationManager.IsHeroIteration)
             {
-                stageManager.GameOver();
+                iterationManager.GameOver();
             }
             else
             {
-                stageManager.NextStage();
+                iterationManager.NextIteration();
             }
         }
     }

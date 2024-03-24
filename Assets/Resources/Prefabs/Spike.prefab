@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8124023321719454279}
   - component: {fileID: 5775892408301348943}
   - component: {fileID: 1995226978048948462}
-  - component: {fileID: 1758359022219239013}
   - component: {fileID: 8219599249855054355}
   m_Layer: 0
   m_Name: Spike
@@ -137,33 +136,6 @@ PolygonCollider2D:
       - {x: 0.014820537, y: 0.001457354}
       - {x: -0.00078478176, y: 0.02939459}
   m_UseDelaunayMesh: 0
---- !u!50 &1758359022219239013
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 138470052478810488}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!114 &8219599249855054355
 MonoBehaviour:
   m_ObjectHideFlags: 0

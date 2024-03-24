@@ -4,38 +4,38 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
-public class StageManager : MonoBehaviour
+public class IterationManager : MonoBehaviour
 {
-    StageSwitchUI stageSwitchUI;
+    IterationSwitchUI iterationSwitchUI;
     RecordAction recordAction;
+    TimeLimit timeLimitBar;
+    BlockManager blockManager;
 
     bool started;
     bool iterationCompleted;
     bool levelCompleted;
 
-    public int stages = 1;
-    public int currentStage = 1;
-    public bool IsHeroStage => currentStage % 2 == 1;
+    public int iterations = 1;
+    [HideInInspector]
+    public int currentIteration = 1;
+    public bool IsHeroIteration => currentIteration % 2 == 1;
     public bool useBlockManager = false;
 
     public Vector3 heroPosition = new(0, 0, 0);
     public List<Vector3> enemyPosition = new();
     public Vector3 destinationPosition = new(0, 0, 0);
-    private CooldownBar cooldownBar;
-    private BlockManager blockManager;
-
 
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
 
     void Awake()
     {
-        stageSwitchUI = FindObjectOfType<StageSwitchUI>();
-        Assert.IsNotNull(stageSwitchUI, "StageSwitchUI not found");
-        Assert.IsTrue(enemyPosition.Count == stages / 2, "Enemy positions not set correctly");
+        iterationSwitchUI = FindObjectOfType<IterationSwitchUI>();
+        Assert.IsNotNull(iterationSwitchUI, "IterationSwitchUI not found");
+        Assert.IsTrue(enemyPosition.Count == iterations / 2, "Enemy positions not set correctly");
 
-        cooldownBar = GetComponent<CooldownBar>();
-        Assert.IsNotNull(cooldownBar, "CooldownBar not found");
+        timeLimitBar = GetComponent<TimeLimit>();
+        Assert.IsNotNull(timeLimitBar, "TimeLimitBar not found");
 
         if (useBlockManager)
         {
@@ -47,20 +47,20 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         recordAction = gameObject.AddComponent<RecordAction>();
-        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
-        LoadStage();
+        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
+        LoadIteration();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {
-            StartStage();
+            StartIteration();
         }
 
         if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton3))
         {
-            BackStage();
+            BackIteration();
         }
 
         if (Input.GetKeyDown(KeyCode.B))
@@ -69,18 +69,18 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    #region Stage Complete Functions
-    public void NextStage()
+    #region Iteration Complete API
+    public void NextIteration()
     {
         if (iterationCompleted)
         {
             return;
         }
 
-        Assert.IsTrue(currentStage <= stages);
+        Assert.IsTrue(currentIteration <= iterations);
 
         if (levelCompleted) { }
-        else if (IsHeroStage)
+        else if (IsHeroIteration)
         {
             heroActions.Add(recordAction.TakeActions());
         }
@@ -89,17 +89,17 @@ public class StageManager : MonoBehaviour
             enemyActions.Add(recordAction.TakeActions());
         }
 
-        if (currentStage == stages)
+        if (currentIteration == iterations)
         {
             levelCompleted = true;
-            StageCompleted();
-            stageSwitchUI.ShowContent(StageSwitchUI.MessageType.NextLevel);
+            IterationCompleted();
+            iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.NextLevel);
             return;
         }
 
-        currentStage++;
-        StageCompleted();
-        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Pass);
+        currentIteration++;
+        IterationCompleted();
+        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Pass);
     }
 
     public void GameOver()
@@ -109,8 +109,8 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        StageCompleted();
-        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.GameOver);
+        IterationCompleted();
+        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.GameOver);
     }
     #endregion
 
@@ -118,13 +118,17 @@ public class StageManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         RemoveObjects();
-        LoadStage();
+        LoadIteration();
     }
 
-    void StageCompleted()
+    void IterationCompleted()
     {
         iterationCompleted = true;
-        cooldownBar.Reset();
+        timeLimitBar.Reset();
+        foreach (var spikeBlock in GameObject.FindGameObjectsWithTag("SpikeBlock"))
+        {
+            spikeBlock.GetComponent<SpikeBlockBehaviour>().Reset();
+        }
         if (useBlockManager)
             blockManager.Reset();
         UpdateCharacterMoveState(false);
@@ -194,7 +198,7 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    void LoadStage()
+    void LoadIteration()
     {
         if (levelCompleted)
         {
@@ -202,21 +206,21 @@ public class StageManager : MonoBehaviour
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
-        else if (IsHeroStage)
+        else if (IsHeroIteration)
         {
             var hero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             hero.GetComponent<MoveBehaviour>().AddIndicator();
         }
         else
         {
-            var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[currentStage / 2 - 1], Quaternion.identity);
+            var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[currentIteration / 2 - 1], Quaternion.identity);
             enemy.GetComponent<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
 
-        for (int i = 0; i < (currentStage + (levelCompleted ? 1 : 0) - 1) / 2; i++)
+        for (int i = 0; i < (currentIteration + (levelCompleted ? 1 : 0) - 1) / 2; i++)
         {
             var aiEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[i], Quaternion.identity);
             aiEnemy.GetComponent<MoveBehaviour>().input = new RecordInput(enemyActions[i]);
@@ -229,14 +233,14 @@ public class StageManager : MonoBehaviour
         started = false;
     }
 
-    void StartStage()
+    void StartIteration()
     {
         if (started)
         {
             return;
         }
-        cooldownBar.StartCooldown();
-        stageSwitchUI.StopShowContent();
+        timeLimitBar.Run();
+        iterationSwitchUI.StopShowContent();
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
         iterationCompleted = false;
@@ -244,33 +248,33 @@ public class StageManager : MonoBehaviour
         Random.InitState(42);
     }
 
-    void BackStage()
+    void BackIteration()
     {
         if (started)
         {
-            StageCompleted();
+            IterationCompleted();
             if (levelCompleted)
             {
-                stageSwitchUI.ShowContent(StageSwitchUI.MessageType.NextLevel);
+                iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.NextLevel);
             }
             else
             {
-                stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
+                iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
             }
             return;
         }
 
-        if (currentStage == 1)
+        if (currentIteration == 1)
         {
             return;
         }
 
         if (!levelCompleted)
         {
-            currentStage--;
+            currentIteration--;
         }
         levelCompleted = false;
-        if (IsHeroStage)
+        if (IsHeroIteration)
         {
             heroActions.RemoveAt(heroActions.Count - 1);
         }
@@ -278,7 +282,7 @@ public class StageManager : MonoBehaviour
         {
             enemyActions.RemoveAt(enemyActions.Count - 1);
         }
-        stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Undo);
-        StageCompleted();
+        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Undo);
+        IterationCompleted();
     }
 }

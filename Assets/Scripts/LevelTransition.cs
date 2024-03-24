@@ -5,20 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class LevelTransition : MonoBehaviour
 {
-    public string nextSceneName = "";        // define the next scene name
+    public string nextSceneName = "";
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {
-            var heroes = GameObject.FindGameObjectsWithTag("Hero");
-            foreach (var hero in heroes)
+            var hero = GameObject.FindGameObjectWithTag("Hero");
+            if (GetComponent<Renderer>().bounds.Contains(hero.transform.position))
             {
-                if (GetComponent<Renderer>().bounds.Contains(hero.transform.position))
-                {
-                    LoadNextScene();
-                    break;
-                }
+                LoadNextScene();
             }
         }
     }

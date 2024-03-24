@@ -14,14 +14,14 @@ public class SpikeBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            var iterationManager = FindObjectOfType<IterationManager>();
+            if (iterationManager.IsHeroIteration)
             {
-                stageManager.GameOver();
+                iterationManager.GameOver();
             }
             else
             {
-                stageManager.NextStage();
+                iterationManager.NextIteration();
             }
         }
     }

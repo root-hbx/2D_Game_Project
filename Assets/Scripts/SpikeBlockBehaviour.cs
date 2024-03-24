@@ -6,10 +6,12 @@ using UnityEngine;
 public class SpikeBlockBehaviour : MonoBehaviour
 {
     Rigidbody2D rb;
+
     Vector3 startPos;
     bool isReturning;
     float returnTime;
     const float kReturnDelay = 1f;
+
     bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position + Vector2.down * 2, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
     void Start()
@@ -54,15 +56,22 @@ public class SpikeBlockBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            var iterationManager = FindObjectOfType<IterationManager>();
+            if (iterationManager.IsHeroIteration)
             {
-                stageManager.GameOver();
+                iterationManager.GameOver();
             }
             else
             {
-                stageManager.NextStage();
+                iterationManager.NextIteration();
             }
         }
+    }
+
+    public void Reset()
+    {
+        transform.position = startPos;
+        isReturning = false;
+        rb.gravityScale = 0;
     }
 }

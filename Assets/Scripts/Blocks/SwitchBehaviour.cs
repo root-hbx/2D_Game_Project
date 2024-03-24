@@ -5,10 +5,10 @@ using UnityEngine;
 public class SwitchBehaviour : MonoBehaviour
 {
     public BlockBehaviour.BlockColor oriColor = BlockBehaviour.BlockColor.Blue;
-    // Start is called before the first frame update
+
     void Start()
     {
-        if (oriColor == 0)
+        if (oriColor == BlockBehaviour.BlockColor.Blue)
         {
             GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Textures/Blocks/blue_c");
         }
@@ -18,11 +18,6 @@ public class SwitchBehaviour : MonoBehaviour
         Reset();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Reset()
     {
         GetComponent<Renderer>().enabled = true;
@@ -32,7 +27,6 @@ public class SwitchBehaviour : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            Debug.Log("Switch hit");
             GetComponent<Renderer>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
             var blockManager = FindObjectOfType<BlockManager>();

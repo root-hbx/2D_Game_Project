@@ -5,30 +5,29 @@ using UnityEngine.Assertions;
 
 public class MoveBehaviour : MonoBehaviour
 {
+    HeroAnim heroAnim;
+    GameObject indicator;
+    Rigidbody2D rigidBody;
+
     public IInput input = new ActualInput();
-    private HeroAnim heroAnim;
-    private GameObject indicator;
 
     const float kMoveAcceleration = 80.0f;
     const float kMaxMoveSpeed = 10.0f;
-    // Each deep jump is 7 units high
-    const float kJumpForce = 30.0f;
-
-    Rigidbody2D rb;
+    const float kJumpForce = 30.0f;     // Each deep jump is 7 units high
     const float kFallMultiplier = 8f;
     const float kLowJumpMultiplier = 10f;
-
     const float kCoyoteTime = 0.1f;
     float leftGroundCoyoteTime = 0;
 
     bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
+
     void Start()
     {
         heroAnim = GetComponent<HeroAnim>();
         Assert.IsNotNull(heroAnim, "HeroAnim not found");
-        rb = GetComponent<Rigidbody2D>();
-        Assert.IsNotNull(rb, "Rigidbody2D not found");
+        rigidBody = GetComponent<Rigidbody2D>();
+        Assert.IsNotNull(rigidBody, "Rigidbody2D not found");
     }
 
     void FixedUpdate()
@@ -66,7 +65,7 @@ public class MoveBehaviour : MonoBehaviour
 
         if (moveDir != 0)
         {
-            rb.AddForce(new Vector2(moveDir * kMoveAcceleration, 0), ForceMode2D.Impulse);
+            rigidBody.AddForce(new Vector2(moveDir * kMoveAcceleration, 0), ForceMode2D.Impulse);
             if (!heroAnim.IsJumping)
             {
                 heroAnim.IsRuning = true;
@@ -76,9 +75,9 @@ public class MoveBehaviour : MonoBehaviour
 
     void BetterMovement()
     {
-        if (Mathf.Abs(rb.velocity.x) > kMaxMoveSpeed)
+        if (Mathf.Abs(rigidBody.velocity.x) > kMaxMoveSpeed)
         {
-            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * kMaxMoveSpeed, rb.velocity.y);
+            rigidBody.velocity = new Vector2(Mathf.Sign(rigidBody.velocity.x) * kMaxMoveSpeed, rigidBody.velocity.y);
         }
     }
 
@@ -89,7 +88,7 @@ public class MoveBehaviour : MonoBehaviour
             if (IsGrounded || leftGroundCoyoteTime + kCoyoteTime > Time.time)
             {
                 heroAnim.IsJumping = true;
-                rb.velocity = new Vector2(rb.velocity.x, kJumpForce);
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
                 StartCoroutine(nameof(StopJumpAnime));
             }
         }
@@ -98,7 +97,7 @@ public class MoveBehaviour : MonoBehaviour
     IEnumerator StopJumpAnime()
     {
         yield return new WaitForSeconds(0.2f);
-        while (rb.velocity.y > 0)
+        while (rigidBody.velocity.y > 0)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -107,13 +106,13 @@ public class MoveBehaviour : MonoBehaviour
 
     void BetterJump()
     {
-        if (rb.velocity.y < 0)
+        if (rigidBody.velocity.y < 0)
         {
-            rb.velocity += kFallMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kFallMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
         }
-        else if (rb.velocity.y > 0 && !input.GetKey(InputKey.W))
+        else if (rigidBody.velocity.y > 0 && !input.GetKey(InputKey.W))
         {
-            rb.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
         }
     }
 

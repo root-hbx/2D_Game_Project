@@ -9,10 +9,7 @@ public enum InputKey
     A = 1 << 1,
     S = 1 << 2,
     D = 1 << 3,
-    /// <summary>
-    /// Represents Attack. Now the Actual Space Key is not used for Attack anymore, but jump (as W key). 
-    /// </summary>
-    Space = 1 << 4,
+    Attack = 1 << 4,
 }
 
 public interface IInput
@@ -60,23 +57,11 @@ public class ActualInput : IInput
                 return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
             case InputKey.D:
                 return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == -1;
-            case InputKey.Space:
+            case InputKey.Attack:
                 return Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.JoystickButton1);
             default:
                 return false;
         }
-    }
-
-    public void ConsumeFrame()
-    {
-    }
-}
-
-public class EmptyInput : IInput
-{
-    public bool GetKey(InputKey key)
-    {
-        return false;
     }
 
     public void ConsumeFrame()

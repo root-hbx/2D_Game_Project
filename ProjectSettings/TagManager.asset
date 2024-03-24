@@ -10,6 +10,7 @@ TagManager:
   - Bullet
   - Destination
   - Portal
+  - SpikeBlock
   layers:
   - Default
   - TransparentFX

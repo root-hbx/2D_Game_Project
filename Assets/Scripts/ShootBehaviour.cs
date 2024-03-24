@@ -28,7 +28,7 @@ public class ShootBehaviour : MonoBehaviour
             direction = Direction.Left;
         }
 
-        if (input.GetKey(InputKey.Space))
+        if (input.GetKey(InputKey.Attack))
         {
             if (Time.time - lastShootTime > kShootInterval)
             {
@@ -41,10 +41,9 @@ public class ShootBehaviour : MonoBehaviour
 
     void Shoot()
     {
-        // the bullet should outside the player
         Vector3 bulletPosition = transform.position;
         Bounds bounds = GetComponent<Renderer>().bounds;
-        bulletPosition.x += (direction == Direction.Right ? 1 : -1) * (bounds.size.x);
+        bulletPosition.x += (direction == Direction.Right ? 1 : -1) * bounds.size.x;
         bulletPosition.y += bounds.size.y / 2;
         float rotateAngle = direction == Direction.Right ? -90 : 90;
         Instantiate(Resources.Load("Prefabs/Bullet"), bulletPosition, Quaternion.Euler(0, 0, rotateAngle));

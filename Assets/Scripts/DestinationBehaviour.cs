@@ -18,14 +18,14 @@ public class DestinationBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Hero"))
         {
             animator.SetTrigger("Pressed");
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            var iterationManager = FindObjectOfType<IterationManager>();
+            if (iterationManager.IsHeroIteration)
             {
-                stageManager.NextStage();
+                iterationManager.NextIteration();
             }
             else
             {
-                stageManager.GameOver();
+                iterationManager.GameOver();
             }
         }
     }

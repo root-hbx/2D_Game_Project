@@ -4,9 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class StageSwitchUI : MonoBehaviour
+public class IterationSwitchUI : MonoBehaviour
 {
     TMP_Text text;
+
     public enum MessageType
     {
         Start,
