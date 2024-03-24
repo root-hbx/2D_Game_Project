@@ -19,8 +19,8 @@ public class StageManager : MonoBehaviour
 
     public Vector3 heroPosition = new(0, 0, 0);
     public List<Vector3> enemyPosition = new();
-
     public Vector3 destinationPosition = new(0, 0, 0);
+    public CooldownBar cooldownbar;
 
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
@@ -37,6 +37,7 @@ public class StageManager : MonoBehaviour
         recordAction = gameObject.AddComponent<RecordAction>();
         stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
         LoadStage();
+        cooldownbar = GameObject.Find("CooldownBar").GetComponent<CooldownBar>();
     }
 
     void Update()
@@ -59,6 +60,7 @@ public class StageManager : MonoBehaviour
     #region Stage Complete Functions
     public void NextStage()
     {
+        cooldownbar.over = true;
         if (iterationCompleted)
         {
             return;
@@ -91,6 +93,7 @@ public class StageManager : MonoBehaviour
 
     public void GameOver()
     {
+        cooldownbar.over = true;
         if (iterationCompleted)
         {
             return;
@@ -223,7 +226,7 @@ public class StageManager : MonoBehaviour
         {
             return;
         }
-
+        cooldownbar.isCooldowm = true;
         stageSwitchUI.StopShowContent();
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
