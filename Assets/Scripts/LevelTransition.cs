@@ -5,32 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class LevelTransition : MonoBehaviour
 {
-    public GameObject doorToActivate = null; // define the door to activate in this level
-    public GameObject prefabToMatch = null;  // need to match the door position at least
-    void Start() 
-    {   // You have to update this part by each single level
-        
-    }
+    public string nextSceneName = "";        // define the next scene name
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && IsPrefabMatchingPosition())
-        {   // the gamer press <Enter>  AND the door is at the same position as the prefab
-                LoadNextScene();
-        }
-    }
-    
-    bool IsPrefabMatchingPosition()
-    {
-        if (doorToActivate != null && prefabToMatch != null)
+        if (Input.GetKey(KeyCode.Return))
         {
-            return doorToActivate.transform.position == prefabToMatch.transform.position;
+            Debug.Log("Return key is pressed");
+            var heroes = GameObject.FindGameObjectsWithTag("Hero");
+            foreach (var hero in heroes)
+            {
+                if (GetComponent<Renderer>().bounds.Contains(hero.transform.position))
+                {
+                    LoadNextScene();
+                    break;
+                }
+            }
         }
-        return false;
     }
 
     void LoadNextScene()
-    {   // This part needs to be updated by each single level 
-        SceneManager.LoadScene("SceneNumber_Level_n"); 
+    {
+        SceneManager.LoadScene(nextSceneName);
     }
 }
