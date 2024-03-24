@@ -43,12 +43,12 @@ public class StageManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {
             StartStage();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton3))
         {
             BackStage();
         }
@@ -143,6 +143,7 @@ public class StageManager : MonoBehaviour
         foreach (var hero in heroes)
         {
             hero.GetComponent<MoveBehaviour>().enabled = ableMove;
+            hero.GetComponent<ShootBehaviour>().enabled = ableMove;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");

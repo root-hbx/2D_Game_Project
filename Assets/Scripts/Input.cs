@@ -53,15 +53,15 @@ public class ActualInput : IInput
         switch (key)
         {
             case InputKey.W:
-                return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.K);
+                return Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.JoystickButton0);
             case InputKey.A:
-                return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+                return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") == 1;
             case InputKey.S:
                 return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
             case InputKey.D:
-                return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+                return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == -1;
             case InputKey.Space:
-                return Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J);
+                return Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.JoystickButton1);
             default:
                 return false;
         }

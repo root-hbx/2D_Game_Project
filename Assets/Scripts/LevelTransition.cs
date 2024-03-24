@@ -9,7 +9,7 @@ public class LevelTransition : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.JoystickButton4))
         {
             var heroes = GameObject.FindGameObjectsWithTag("Hero");
             foreach (var hero in heroes)
