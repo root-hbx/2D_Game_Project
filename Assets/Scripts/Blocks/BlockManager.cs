@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BlockManager : MonoBehaviour
 {
-    public SwitchBehaviour[] allSwitches;
-    public BlockBehaviour[] redBlocks,blueBlocks;
+    private SwitchBehaviour[] allSwitches;
+    private BlockBehaviour[] blocks;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,37 +16,28 @@ public class BlockManager : MonoBehaviour
     {
 
     }
-    public void BlocksChange(int color)
+    public void BlocksChange(BlockBehaviour.BlockColor color)
     {
-        if(color == 1)
+        foreach (var block in blocks)
         {
-            for(int i = 0; i< redBlocks.Length; ++i)
+            if (block.color == color)
             {
-                redBlocks[i].ChangeStatus();
+                Debug.Log("Change block color");
+                block.ChangeStatus();
             }
         }
-        else
-        {
-            for (int i = 0; i < blueBlocks.Length; ++i)
-            {
-                blueBlocks[i].ChangeStatus();
-            }
-        }
-        
     }
     public void Reset()
     {
-        for (int i = 0; i < redBlocks.Length; ++i)
+        blocks = FindObjectsOfType<BlockBehaviour>();
+        foreach (var block in blocks)
         {
-            redBlocks[i].Reset();
+            block.Reset();
         }
-        for (int i = 0; i < blueBlocks.Length; ++i)
+        allSwitches = FindObjectsOfType<SwitchBehaviour>();
+        foreach (var switchBlock in allSwitches)
         {
-            blueBlocks[i].Reset();
-        }
-        for (int i = 0; i < allSwitches.Length; ++i)
-        {
-            allSwitches[i].Reset();
+            switchBlock.Reset();
         }
     }
 }

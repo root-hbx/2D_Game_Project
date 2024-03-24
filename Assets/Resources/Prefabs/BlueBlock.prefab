@@ -171,5 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272a3538b77d7bc409c2ac83fc0e7cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curTexture: []
-  oriStatus: 1
+  solidTexture: {fileID: 21300000, guid: 91de6247b940a7845881932dcaefdfae, type: 3}
+  transparentTexture: {fileID: 21300000, guid: 5c686f2d90c0f2846984fdc83f6d69f5, type: 3}
+  oriStatus: 0
+  color: 0

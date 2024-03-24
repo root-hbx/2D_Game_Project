@@ -20,7 +20,9 @@ public class StageManager : MonoBehaviour
     public Vector3 heroPosition = new(0, 0, 0);
     public List<Vector3> enemyPosition = new();
     public Vector3 destinationPosition = new(0, 0, 0);
-    public CooldownBar cooldownBar;
+    private CooldownBar cooldownBar;
+    private BlockManager blockManager;
+
 
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
@@ -30,8 +32,12 @@ public class StageManager : MonoBehaviour
         stageSwitchUI = FindObjectOfType<StageSwitchUI>();
         Assert.IsNotNull(stageSwitchUI, "StageSwitchUI not found");
         Assert.IsTrue(enemyPosition.Count == stages / 2, "Enemy positions not set correctly");
+
         cooldownBar = GetComponent<CooldownBar>();
         Assert.IsNotNull(cooldownBar, "CooldownBar not found");
+
+        blockManager = GetComponent<BlockManager>();
+        Assert.IsNotNull(blockManager, "BlockManager not found");
     }
 
     void Start()
@@ -115,6 +121,7 @@ public class StageManager : MonoBehaviour
     {
         iterationCompleted = true;
         cooldownBar.Reset();
+        blockManager.Reset();
         UpdateCharacterMoveState(false);
         PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());

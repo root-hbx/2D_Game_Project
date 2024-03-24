@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SwitchBehaviour : MonoBehaviour
 {
-    public int oriColor = 0;
+    public BlockBehaviour.BlockColor oriColor = BlockBehaviour.BlockColor.Blue;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +31,9 @@ public class SwitchBehaviour : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.name == "Bullet(Clone)")
+        if (other.gameObject.tag == "Bullet")
         {
+            Debug.Log("Switch hit");
             GetComponent<Renderer>().enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
             var blockManager = FindObjectOfType<BlockManager>();
