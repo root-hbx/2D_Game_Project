@@ -41,7 +41,7 @@ public class StageSwitchUI : MonoBehaviour
                 text.text = "Iter Undo. Press Enter to Continue";
                 break;
             case MessageType.NextLevel:
-                text.text = "Congratulation! All Iterations Completed. Press Enter to Watch Replay";
+                text.text = "Congratulation! All Iterations Completed. Press Enter to Watch Replay. Press ESC to go back to menu.";
                 break;
         }
     }

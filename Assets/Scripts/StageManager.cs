@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -48,6 +49,10 @@ public class StageManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             BackStage();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Directory");
         }
     }
 
