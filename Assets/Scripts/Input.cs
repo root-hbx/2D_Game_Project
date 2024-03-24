@@ -61,7 +61,7 @@ public class ActualInput : IInput
             case InputKey.D:
                 return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == -1;
             case InputKey.Space:
-                return Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.JoystickButton1);
+                return Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.JoystickButton1);
             default:
                 return false;
         }
