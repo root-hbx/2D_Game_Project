@@ -6,35 +6,36 @@ using UnityEngine.UI;
 public class CooldownBar : MonoBehaviour
 {
     public float time;
-    public Image imagecooldown;
-    public bool isCooldowm = false;//开始计时
+    private Image CooldownImage = null;
+    public bool isCooldown = false;//开始计时
     public bool over = false;//游戏结束!!!!!!!!!!!!!!
     private StageManager pl;
     // Start is called before the first frame update
     void Start()
     {
-        pl = GameObject.Find("Global State").GetComponent<StageManager>();
+        pl = GetComponent<StageManager>();
+        CooldownImage = GameObject.Find("Cooldown/CooldownBar/CooldownProgress").GetComponent<Image>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if(isCooldowm)
+        if (isCooldown)
         {
-            imagecooldown.fillAmount +=1 / time * Time.deltaTime;
-            if(imagecooldown.fillAmount >= 1)
+            CooldownImage.fillAmount += 1 / time * Time.deltaTime;
+            if (CooldownImage.fillAmount >= 1)
             {
                 pl.GameOver();
-                isCooldowm = false;
+                isCooldown = false;
             }
         }
-        if(over)
+        if (over)
         {
-            imagecooldown.fillAmount = 0;
-            isCooldowm = false;
+            CooldownImage.fillAmount = 0;
+            isCooldown = false;
             over = false;
         }
     }
-    
+
 }
