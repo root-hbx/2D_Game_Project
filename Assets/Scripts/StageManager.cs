@@ -16,6 +16,7 @@ public class StageManager : MonoBehaviour
     public int stages = 1;
     public int currentStage = 1;
     public bool IsHeroStage => currentStage % 2 == 1;
+    public bool useBlockManager = false;
 
     public Vector3 heroPosition = new(0, 0, 0);
     public List<Vector3> enemyPosition = new();
@@ -36,8 +37,11 @@ public class StageManager : MonoBehaviour
         cooldownBar = GetComponent<CooldownBar>();
         Assert.IsNotNull(cooldownBar, "CooldownBar not found");
 
-        blockManager = GetComponent<BlockManager>();
-        Assert.IsNotNull(blockManager, "BlockManager not found");
+        if (useBlockManager)
+        {
+            blockManager = GetComponent<BlockManager>();
+            Assert.IsNotNull(blockManager, "BlockManager not found");
+        }
     }
 
     void Start()
@@ -121,7 +125,8 @@ public class StageManager : MonoBehaviour
     {
         iterationCompleted = true;
         cooldownBar.Reset();
-        blockManager.Reset();
+        if (useBlockManager)
+            blockManager.Reset();
         UpdateCharacterMoveState(false);
         PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());
