@@ -52,16 +52,16 @@ public class StageManager : MonoBehaviour
         {
             BackStage();
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Directory");
+            SceneManager.LoadSceneAsync("Directory");
         }
     }
 
     #region Stage Complete Functions
     public void NextStage()
     {
-        cooldownBar.over = true;
         if (iterationCompleted)
         {
             return;
@@ -94,7 +94,6 @@ public class StageManager : MonoBehaviour
 
     public void GameOver()
     {
-        cooldownBar.over = true;
         if (iterationCompleted)
         {
             return;
@@ -115,6 +114,7 @@ public class StageManager : MonoBehaviour
     void StageCompleted()
     {
         iterationCompleted = true;
+        cooldownBar.Reset();
         UpdateCharacterMoveState(false);
         PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());
@@ -187,6 +187,7 @@ public class StageManager : MonoBehaviour
         {
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
         else if (IsHeroStage)
         {
@@ -199,6 +200,7 @@ public class StageManager : MonoBehaviour
             enemy.GetComponent<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
 
         for (int i = 0; i < (currentStage + (levelCompleted ? 1 : 0) - 1) / 2; i++)
@@ -220,7 +222,7 @@ public class StageManager : MonoBehaviour
         {
             return;
         }
-        cooldownBar.isCooldown = true;
+        cooldownBar.StartCooldown();
         stageSwitchUI.StopShowContent();
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
@@ -237,6 +239,10 @@ public class StageManager : MonoBehaviour
             if (levelCompleted)
             {
                 stageSwitchUI.ShowContent(StageSwitchUI.MessageType.NextLevel);
+            }
+            else
+            {
+                stageSwitchUI.ShowContent(StageSwitchUI.MessageType.Start);
             }
             return;
         }

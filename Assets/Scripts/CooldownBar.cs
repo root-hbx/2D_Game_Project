@@ -5,37 +5,41 @@ using UnityEngine.UI;
 
 public class CooldownBar : MonoBehaviour
 {
+    Image timeImage;
+    StageManager stageManager;
+
     public float time;
-    private Image CooldownImage = null;
-    public bool isCooldown = false;//开始计时
-    public bool over = false;//游戏结束!!!!!!!!!!!!!!
-    private StageManager pl;
-    // Start is called before the first frame update
+    bool isCooldown;
+
+
     void Start()
     {
-        pl = GetComponent<StageManager>();
-        CooldownImage = GameObject.Find("Cooldown/CooldownBar/CooldownProgress").GetComponent<Image>();
+        stageManager = GetComponent<StageManager>();
+        timeImage = GameObject.Find("Cooldown/CooldownBar/CooldownProgress").GetComponent<Image>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (isCooldown)
         {
-            CooldownImage.fillAmount += 1 / time * Time.deltaTime;
-            if (CooldownImage.fillAmount >= 1)
+            timeImage.fillAmount += 1 / time * Time.deltaTime;
+            if (timeImage.fillAmount >= 1)
             {
-                pl.GameOver();
+                stageManager.GameOver();
                 isCooldown = false;
             }
         }
-        if (over)
-        {
-            CooldownImage.fillAmount = 0;
-            isCooldown = false;
-            over = false;
-        }
     }
 
+    public void Reset()
+    {
+        timeImage.fillAmount = 0;
+        isCooldown = false;
+    }
+
+    public void StartCooldown()
+    {
+        isCooldown = true;
+    }
 }

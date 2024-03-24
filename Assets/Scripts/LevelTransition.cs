@@ -11,7 +11,6 @@ public class LevelTransition : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Return))
         {
-            Debug.Log("Return key is pressed");
             var heroes = GameObject.FindGameObjectsWithTag("Hero");
             foreach (var hero in heroes)
             {
@@ -26,6 +25,6 @@ public class LevelTransition : MonoBehaviour
 
     void LoadNextScene()
     {
-        SceneManager.LoadScene(nextSceneName);
+        SceneManager.LoadSceneAsync(nextSceneName);
     }
 }
