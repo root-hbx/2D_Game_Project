@@ -6,5 +6,5 @@
 - You can learn more details on [XJTU-IntroGameDev-2024](https://myuwbclasses.github.io/XJTU-IntroGameDev/)
 
 ### Construction of this Branch
-- Note_in_Clsss: contains the notes in our class
+- Note_in_Class: contains the notes in our class
 - BoxuanHu1&2: contains the answer to the exercise 1 & 2
