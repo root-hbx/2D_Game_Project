@@ -53,7 +53,7 @@ public class StageManager : MonoBehaviour
             BackStage();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             SceneManager.LoadSceneAsync("Directory");
         }
