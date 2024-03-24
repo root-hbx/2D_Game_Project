@@ -21,6 +21,7 @@ public class LevelTransition : MonoBehaviour
 
     void LoadNextScene()
     {
+        GlobalState.instance.heroPosition = GameObject.FindGameObjectWithTag("Hero").transform.position;
         SceneManager.LoadSceneAsync(nextSceneName);
     }
 }

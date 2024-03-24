@@ -13,14 +13,15 @@ public class MoveBehaviour : MonoBehaviour
 
     const float kMoveAcceleration = 80.0f;
     const float kMaxMoveSpeed = 10.0f;
-    const float kJumpForce = 30.0f;     // Each deep jump is 7 units high
+    const float kJumpForce = 37.0f;     // Each deep jump is 7 units high
     const float kFallMultiplier = 8f;
     const float kLowJumpMultiplier = 10f;
-    const float kCoyoteTime = 0.1f;
-    float leftGroundCoyoteTime = 0;
+    const float kCoyoteTime = 0.15f;
+    const float kConsumeTime = 0.05f;
+    float lastGroundTime = 0;
+    float lastJumpTime = 0;
 
     bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
-
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class MoveBehaviour : MonoBehaviour
         BetterMovement();
         UpdateJump();
         BetterJump();
-        UpdateCoyoTime();
+        UpdateGroundTime();
 
         input.ConsumeFrame();
         if (indicator != null)
@@ -85,7 +86,7 @@ public class MoveBehaviour : MonoBehaviour
     {
         if (input.GetKey(InputKey.W))
         {
-            if (IsGrounded || leftGroundCoyoteTime + kCoyoteTime > Time.time)
+            if (lastJumpTime + kConsumeTime < Time.time && Time.time < lastGroundTime + kCoyoteTime)
             {
                 heroAnim.IsJumping = true;
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
@@ -108,19 +109,23 @@ public class MoveBehaviour : MonoBehaviour
     {
         if (rigidBody.velocity.y < 0)
         {
-            rigidBody.velocity += kFallMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kFallMultiplier * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
         }
         else if (rigidBody.velocity.y > 0 && !input.GetKey(InputKey.W))
         {
-            rigidBody.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
         }
     }
 
-    void UpdateCoyoTime()
+    void UpdateGroundTime()
     {
         if (IsGrounded)
         {
-            leftGroundCoyoteTime = Time.time;
+            lastGroundTime = Time.time;
+        }
+        else
+        {
+            lastJumpTime = Time.time;
         }
     }
 

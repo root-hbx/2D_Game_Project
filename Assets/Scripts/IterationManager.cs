@@ -62,11 +62,6 @@ public class IterationManager : MonoBehaviour
         {
             BackIteration();
         }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            SceneManager.LoadSceneAsync("Directory");
-        }
     }
 
     #region Iteration Complete API

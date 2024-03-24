@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GlobalState : MonoBehaviour
 {
-    static GlobalState instance;
+    public static GlobalState instance;
+
+    [HideInInspector]
+    public Vector3 heroPosition;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetConfig()
@@ -32,6 +36,11 @@ public class GlobalState : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Application.Quit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            SceneManager.LoadSceneAsync("Directory");
         }
     }
 }
