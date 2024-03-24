@@ -20,6 +20,7 @@ public class TimeLimit : MonoBehaviour
         Assert.IsNotNull(iterationManager, "IterationManager not found");
         timeImage = GameObject.Find("TimeLimitBar/Time Limit Progress").GetComponent<Image>();
         Assert.IsNotNull(timeImage, "Image not found");
+        Reset();
     }
 
     // Update is called once per frame
@@ -27,8 +28,8 @@ public class TimeLimit : MonoBehaviour
     {
         if (running)
         {
-            timeImage.fillAmount += 1 / limitTime * Time.deltaTime;
-            if (timeImage.fillAmount >= 1)
+            timeImage.fillAmount -= 1 / limitTime * Time.deltaTime;
+            if (timeImage.fillAmount <= 0)
             {
                 iterationManager.GameOver();
                 running = false;
@@ -38,7 +39,7 @@ public class TimeLimit : MonoBehaviour
 
     public void Reset()
     {
-        timeImage.fillAmount = 0;
+        timeImage.fillAmount = 1;
         running = false;
     }
 
