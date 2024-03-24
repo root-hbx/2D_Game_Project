@@ -117,13 +117,6 @@ public class IterationManager : MonoBehaviour
     IEnumerator DelayBeforeRemoveObjects()
     {
         yield return new WaitForSeconds(0.3f);
-        RemoveObjects();
-        LoadIteration();
-    }
-
-    void IterationCompleted()
-    {
-        iterationCompleted = true;
         timeLimitBar.Reset();
         foreach (var spikeBlock in GameObject.FindGameObjectsWithTag("SpikeBlock"))
         {
@@ -131,6 +124,13 @@ public class IterationManager : MonoBehaviour
         }
         if (useBlockManager)
             blockManager.Reset();
+        RemoveObjects();
+        LoadIteration();
+    }
+
+    void IterationCompleted()
+    {
+        iterationCompleted = true;
         UpdateCharacterMoveState(false);
         PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());
