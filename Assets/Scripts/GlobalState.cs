@@ -33,7 +33,7 @@ public class GlobalState : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && SceneManager.GetActiveScene().name != "Directory")
         {
             SceneManager.LoadSceneAsync("Directory");
         }
