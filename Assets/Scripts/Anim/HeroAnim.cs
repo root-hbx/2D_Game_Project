@@ -21,12 +21,6 @@ public class HeroAnim : MonoBehaviour
         set { animator.SetBool("isJumping", value); }
     }
 
-    public bool IsFalling
-    {
-        get { return animator.GetBool("isFalling"); }
-        set { animator.SetBool("isFalling", value); }
-    }
-
     public bool FlipX
     {
         get { return spriteRenderer.flipX; }
