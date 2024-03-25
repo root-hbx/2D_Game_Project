@@ -184,8 +184,10 @@ MonoBehaviour:
 
     W/K/Space: Jump (Hold to Jump higher)
 
-    R: Revert
-    to last Iteration
+    J/E:
+    Fire
+
+    R: Revert to last Iteration
 
     B: Go Back to menu'
   m_isRightToLeft: 0
