@@ -4,70 +4,57 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    static public AudioManager instance;
-    public AudioClip bgmWin;
-    public AudioClip bgmFail;
-    public AudioClip bgmForPlaying;
-    public AudioClip bgmForDict;
+    public enum AudioList
+    {
+        bgmWin,
+        bgmFail,
+        bgmForPlaying,
+        bgmForDict,
+        bgmShoot
+    }
 
-    public AudioClip bgmShoot;
-
-    List<AudioSource> audios = new List<AudioSource>();
+    private AudioSource audioSource;
 
     private void Awake()
     {
-        if (instance == null) {
-            instance = this;
-        }
-        else {
-            Destroy(this.gameObject);
-            return;
-        }
-
-        for(int i=0; i<5; i++)
-        {
-            var audio = this.gameObject.AddComponent<AudioSource>();
-            audios.Add(audio);
-        }
+        
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
 
     }
 
-    public void Play(int index, string name, bool isLoop)
+    public void Play(AudioList name, bool isLoop)
     {
+        Debug.Log(audioSource);
         var clip = GetAudioClip(name);
-        if (clip != null)
-        {
-            var audio = audios[index];
-            audio.clip = clip;
-            audio.loop = isLoop;
-            audio.Play();
-        }
+        audioSource.clip = clip;
+        audioSource.loop = isLoop;
+        audioSource.Play();
     }
 
-    AudioClip GetAudioClip(string name)
+    AudioClip GetAudioClip(AudioList name)
     {
-        switch(name)
+        switch (name)
         {
-            case "bgmWin":
-                return bgmWin;
-            case "bgmFail":
-                return bgmFail;
-            case "bgmForPlaying":
-                return bgmForPlaying;
-            case "bgmForDict":
-                return bgmForDict;
-            case "bgmShoot":
-                return bgmShoot;
+            case AudioList.bgmWin:
+                return Resources.Load<AudioClip>("Audio/bgmWin");
+            case AudioList.bgmFail:
+                return Resources.Load<AudioClip>("Audio/bgmFail");
+            case AudioList.bgmForPlaying:
+                return Resources.Load<AudioClip>("Audio/bgmForPlaying");
+            case AudioList.bgmForDict:
+                return Resources.Load<AudioClip>("Audio/bgmForDict");
+            case AudioList.bgmShoot:
+                return Resources.Load<AudioClip>("Audio/bgmShoot");
         }
         return null;
     }

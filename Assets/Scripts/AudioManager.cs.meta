@@ -3,7 +3,12 @@ guid: b5125907288794925b8cda41387895df
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bgmWin: {fileID: 8300000, guid: 3c762a7d7c8b94b0abaf00d076458603, type: 3}
+  - bgmFail: {fileID: 8300000, guid: 4e4954722e90a43ba9fb878ad922d05b, type: 3}
+  - bgmForPlaying: {fileID: 8300000, guid: f97ae0970e8034c73bc82ad70f44dcdf, type: 3}
+  - bgmForDict: {fileID: 8300000, guid: 876c9f68284a644e083eb462e85cdf88, type: 3}
+  - bgmShoot: {fileID: 8300000, guid: 668b9c0aba6f64da9ad130ce0b5154b6, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
