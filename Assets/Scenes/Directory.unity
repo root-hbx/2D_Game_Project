@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level7
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
@@ -430,7 +430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level5
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
@@ -491,7 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level4
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
@@ -686,7 +686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level8
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
@@ -3705,7 +3705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level6
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
@@ -55435,7 +55435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2079478100943720042, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: nextSceneName
-      value: Level11
+      value: Waiting
       objectReference: {fileID: 0}
     - target: {fileID: 5043332422836394835, guid: 79fa5fb3d98314d0c96c45daa14ec91f, type: 3}
       propertyPath: m_Name
