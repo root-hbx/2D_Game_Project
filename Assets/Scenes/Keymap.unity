@@ -187,10 +187,7 @@ MonoBehaviour:
     R: Revert
     to last Iteration
 
-    B: Go Back to menu
-
-    Q: Quit Game (make the game stop
-    in Webgl builds)'
+    B: Go Back to menu'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f14d5a977d36e47f7b8cd384fb6b98b6, type: 2}
   m_sharedMaterial: {fileID: 6197965249656983981, guid: f14d5a977d36e47f7b8cd384fb6b98b6, type: 2}

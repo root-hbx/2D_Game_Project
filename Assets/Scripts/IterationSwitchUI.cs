@@ -34,19 +34,19 @@ public class IterationSwitchUI : MonoBehaviour
         switch (messageType)
         {
             case MessageType.Start:
-                text.text = "Press Enter to start";
+                text.text = "Press Any Key to start";
                 break;
             case MessageType.Pass:
-                text.text = "Passed! Press Enter to Continue";
+                text.text = "Passed! Press Any Key to Continue";
                 break;
             case MessageType.GameOver:
-                text.text = "Failed! Press Enter to Restart";
+                text.text = "Failed! Press Any Key to Restart";
                 break;
             case MessageType.Undo:
-                text.text = "Iter Undo. Press Enter to Continue";
+                text.text = "Iter Undo. Press Any Key to Continue";
                 break;
             case MessageType.NextLevel:
-                text.text = "Congratulation! All Iterations Completed.\n Press Enter to Watch Replay. Press B to go back to menu.";
+                text.text = "Congratulation! All Iterations Completed.\n Press Any Key to Watch Replay. Press B to go back to menu.";
                 break;
         }
     }

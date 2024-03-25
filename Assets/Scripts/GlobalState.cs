@@ -33,11 +33,6 @@ public class GlobalState : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Application.Quit();
-        }
-
         if (Input.GetKeyDown(KeyCode.B))
         {
             SceneManager.LoadSceneAsync("Directory");
