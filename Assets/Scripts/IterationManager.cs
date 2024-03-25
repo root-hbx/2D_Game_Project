@@ -25,6 +25,8 @@ public class IterationManager : MonoBehaviour
     public List<Vector3> enemyPosition = new();
     public Vector3 destinationPosition = new(0, 0, 0);
 
+    public string levelName;
+
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
 
@@ -48,6 +50,11 @@ public class IterationManager : MonoBehaviour
     {
         recordAction = gameObject.AddComponent<RecordAction>();
         iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
+        if (levelName == null || levelName == "")
+        {
+            levelName = "Level ???";
+        }
+        iterationSwitchUI.ShowLevelName(levelName);
         LoadIteration();
     }
 

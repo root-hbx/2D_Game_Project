@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 public class IterationSwitchUI : MonoBehaviour
 {
     TMP_Text text;
+    TMP_Text levelNameText;
 
     public enum MessageType
     {
@@ -19,8 +20,11 @@ public class IterationSwitchUI : MonoBehaviour
 
     void Awake()
     {
-        text = GetComponentInChildren<TMP_Text>();
-        Assert.IsNotNull(text, "Text not found");
+        var texts = GetComponentsInChildren<TMP_Text>();
+        Assert.IsNotNull(texts, "Text not found");
+        Assert.IsTrue(texts.Length == 2, "Texts not set correctly");
+        text = texts[0];
+        levelNameText = texts[1];
         text.gameObject.SetActive(false);
     }
 
@@ -56,5 +60,29 @@ public class IterationSwitchUI : MonoBehaviour
     public void StopShowContent()
     {
         text.gameObject.SetActive(false);
+    }
+
+    IEnumerator StopShowLevelName()
+    {
+        float fadeDuration = 1f; // Duration of the fade in seconds
+        float elapsedTime = 0f;
+        Color startColor = levelNameText.color;
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f); // Fade out to transparent
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            levelNameText.color = Color.Lerp(startColor, endColor, elapsedTime / fadeDuration);
+            yield return null;
+        }
+
+        levelNameText.gameObject.SetActive(false);
+    }
+
+    public void ShowLevelName(string levelName)
+    {
+        levelNameText.gameObject.SetActive(true);
+        levelNameText.text = levelName;
+        StartCoroutine(StopShowLevelName());
     }
 }
