@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Keymap.unity
     guid: a7ca506f6cddd4429b4700915ed59483
+  - enabled: 1
+    path: Assets/Scenes/Level4.unity
+    guid: 61a68d37053bb43d39ee35819b62f8ed
   m_configObjects: {}
