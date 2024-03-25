@@ -41832,7 +41832,8 @@ MonoBehaviour:
   - {x: -28, y: 1.5, z: 0}
   - {x: -20, y: 1.5, z: 0}
   destinationPosition: {x: 28.2, y: 2.6, z: 0}
-  levelName: 
+  levelName: Tutorial 1
+  allowAliceShoot: 1
 --- !u!4 &630128499
 Transform:
   m_ObjectHideFlags: 0
