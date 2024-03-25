@@ -26,6 +26,7 @@ public class IterationManager : MonoBehaviour
     public Vector3 destinationPosition = new(0, 0, 0);
 
     public string levelName;
+    public bool allowAliceShoot = true;
 
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
@@ -161,7 +162,10 @@ public class IterationManager : MonoBehaviour
         foreach (var hero in heroes)
         {
             hero.GetComponent<MoveBehaviour>().enabled = ableMove;
-            hero.GetComponent<ShootBehaviour>().enabled = ableMove;
+            if(allowAliceShoot)
+                hero.GetComponent<ShootBehaviour>().enabled = ableMove;
+            else
+                hero.GetComponent<ShootBehaviour>().enabled = false;
         }
 
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
