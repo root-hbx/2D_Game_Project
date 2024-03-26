@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviour
+public class BulletBehaviour : IManualBehaviour
 {
     const float kMoveSpeed = 20.0f;
 
-    void Update()
+    public override void ManualUpdate()
     {
         transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.up);
 

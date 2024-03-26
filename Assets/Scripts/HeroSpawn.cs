@@ -6,7 +6,7 @@ public class HeroSpawn : MonoBehaviour
 {
     public Vector3 initHeroPosition;
 
-    void Awake()
+    void Start()
     {
         Vector3 heroPosition;
         if (GlobalState.instance != null)

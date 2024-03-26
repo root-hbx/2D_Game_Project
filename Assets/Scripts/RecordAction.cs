@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecordAction : MonoBehaviour
+public class RecordAction : IManualBehaviour
 {
     List<InputKey> recordActions = new();
     readonly ActualInput input = new();
 
-    void FixedUpdate()
+    public override void ManualUpdate()
     {
         InputKey action = 0;
 

@@ -4,14 +4,13 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-public class TimeLimit : MonoBehaviour
+public class TimeLimit : IManualBehaviour
 {
     Image timeImage;
     IterationManager iterationManager;
 
     public float limitTime;
     bool running;
-
 
     void Start()
     {
@@ -23,8 +22,7 @@ public class TimeLimit : MonoBehaviour
         Reset();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ManualUpdate()
     {
         if (running)
         {

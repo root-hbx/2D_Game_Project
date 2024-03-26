@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
-public class IterationManager : MonoBehaviour
+public class IterationManager : IManualBehaviour
 {
     IterationSwitchUI iterationSwitchUI;
     RecordAction recordAction;
@@ -31,8 +30,10 @@ public class IterationManager : MonoBehaviour
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
 
-    void Awake()
+    new void Awake()
     {
+        base.Awake();
+
         iterationSwitchUI = FindObjectOfType<IterationSwitchUI>();
         Assert.IsNotNull(iterationSwitchUI, "IterationSwitchUI not found");
         Assert.IsTrue(enemyPosition.Count == iterations / 2, "Enemy positions not set correctly");
@@ -59,7 +60,7 @@ public class IterationManager : MonoBehaviour
         LoadIteration();
     }
 
-    void Update()
+    public override void ManualUpdate()
     {
         if (Input.anyKeyDown && !(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.B)))
         {
@@ -162,7 +163,7 @@ public class IterationManager : MonoBehaviour
         foreach (var hero in heroes)
         {
             hero.GetComponent<MoveBehaviour>().enabled = ableMove;
-            if(allowAliceShoot)
+            if (allowAliceShoot)
                 hero.GetComponent<ShootBehaviour>().enabled = ableMove;
             else
                 hero.GetComponent<ShootBehaviour>().enabled = false;

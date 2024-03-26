@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpikeBlockBehaviour : MonoBehaviour
+public class SpikeBlockBehaviour : IManualBehaviour
 {
     Rigidbody2D rb;
 
@@ -20,7 +20,7 @@ public class SpikeBlockBehaviour : MonoBehaviour
         startPos = transform.position;
     }
 
-    void Update()
+    public override void ManualUpdate()
     {
         var hit = Physics2D.Raycast(transform.position, Vector2.down, 20f, 1 << LayerMask.NameToLayer("Hero") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Ground"));
         if (hit.collider != null && (hit.collider.CompareTag("Hero") || hit.collider.CompareTag("Enemy")))

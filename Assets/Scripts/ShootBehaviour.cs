@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootBehaviour : MonoBehaviour
+public class ShootBehaviour : IManualBehaviour
 {
     enum Direction
     {
@@ -16,8 +16,7 @@ public class ShootBehaviour : MonoBehaviour
     float lastShootTime = 0;
     const float kShootInterval = 0.3f;
 
-    // Update is called once per frame
-    void Update()
+    public override void ManualUpdate()
     {
         if (input.GetKey(InputKey.D))
         {

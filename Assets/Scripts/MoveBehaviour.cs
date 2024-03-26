@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class MoveBehaviour : MonoBehaviour
+public class MoveBehaviour : IManualBehaviour
 {
     HeroAnim heroAnim;
     GameObject indicator;
@@ -30,10 +30,9 @@ public class MoveBehaviour : MonoBehaviour
         Assert.IsNotNull(rigidBody, "Rigidbody2D not found");
     }
 
-    void FixedUpdate()
+    public override void ManualUpdate()
     {
         UpdateMovement();
-        // BetterMovement();
         UpdateJump();
         BetterJump();
         UpdateGroundTime();
