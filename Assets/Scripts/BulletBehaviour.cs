@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletBehaviour : IManualBehaviour
 {
@@ -27,20 +29,25 @@ public class BulletBehaviour : IManualBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject);
+            Debug.Log("Enemy hit by bullet");
+            other.gameObject.GetComponent<MoveBehaviour>().Die();
             return;
         }
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            var iterationManager = FindObjectOfType<IterationManager>();
-            if (iterationManager.IsHeroIteration)
+            other.gameObject.GetComponent<MoveBehaviour>().Die();
+            if (SceneManager.GetActiveScene().name != "Directory")
             {
-                iterationManager.GameOver();
-            }
-            else
-            {
-                iterationManager.NextIteration();
+                var iterationManager = FindObjectOfType<IterationManager>();
+                if (iterationManager.IsHeroIteration)
+                {
+                    iterationManager.GameOver();
+                }
+                else
+                {
+                    iterationManager.NextIteration();
+                }
             }
         }
     }

@@ -136,26 +136,26 @@ public class IterationManager : IManualBehaviour
     {
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
-        PlayDisappearingAnimation();
+        // PlayDisappearingAnimation();
         StartCoroutine(DelayBeforeRemoveObjects());
     }
 
-    void PlayDisappearingAnimation()
-    {
-        var heroes = GameObject.FindGameObjectsWithTag("Hero");
-        foreach (var hero in heroes)
-        {
-            hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            hero.GetComponent<Animator>().SetTrigger("Disappear");
-        }
+    // void PlayDisappearingAnimation()
+    // {
+    //     var heroes = GameObject.FindGameObjectsWithTag("Hero");
+    //     foreach (var hero in heroes)
+    //     {
+    //         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+    //         hero.GetComponent<Animator>().SetTrigger("Disappear");
+    //     }
 
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var enemy in enemies)
-        {
-            enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            enemy.GetComponent<Animator>().SetTrigger("Disappear");
-        }
-    }
+    //     var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //     foreach (var enemy in enemies)
+    //     {
+    //         enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+    //         enemy.GetComponent<Animator>().SetTrigger("Disappear");
+    //     }
+    // }
 
     void UpdateCharacterMoveState(bool ableMove)
     {
@@ -210,28 +210,28 @@ public class IterationManager : IManualBehaviour
         if (levelCompleted)
         {
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
-            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponentInChildren<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponentInChildren<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
         else if (IsHeroIteration)
         {
             var hero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
-            hero.GetComponent<MoveBehaviour>().AddIndicator();
+            hero.GetComponentInChildren<MoveBehaviour>().AddIndicator();
         }
         else
         {
             var enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[currentIteration / 2 - 1], Quaternion.identity);
-            enemy.GetComponent<MoveBehaviour>().AddIndicator();
+            enemy.GetComponentInChildren<MoveBehaviour>().AddIndicator();
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
-            aiHero.GetComponent<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
-            aiHero.GetComponent<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponentInChildren<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            aiHero.GetComponentInChildren<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
         }
 
         for (int i = 0; i < (currentIteration + (levelCompleted ? 1 : 0) - 1) / 2; i++)
         {
             var aiEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy"), enemyPosition[i], Quaternion.identity);
-            aiEnemy.GetComponent<MoveBehaviour>().input = new RecordInput(enemyActions[i]);
-            aiEnemy.GetComponent<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
+            aiEnemy.GetComponentInChildren<MoveBehaviour>().input = new RecordInput(enemyActions[i]);
+            aiEnemy.GetComponentInChildren<ShootBehaviour>().input = new RecordInput(enemyActions[i]);
         }
         UpdateCharacterMoveState(false);
 

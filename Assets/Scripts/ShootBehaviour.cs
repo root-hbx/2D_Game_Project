@@ -10,7 +10,6 @@ public class ShootBehaviour : IManualBehaviour
         Right
     }
     Direction direction = Direction.Right;
-
     public IInput input = new ActualInput();
 
     float lastShootTime = 0;
@@ -18,21 +17,15 @@ public class ShootBehaviour : IManualBehaviour
 
     public override void ManualUpdate()
     {
-        if (input.GetKey(InputKey.D))
-        {
-            direction = Direction.Right;
-        }
-        else if (input.GetKey(InputKey.A))
-        {
-            direction = Direction.Left;
-        }
-
+        direction = transform.localScale.x < 0 ? Direction.Right : Direction.Left;
         if (input.GetKey(InputKey.Attack))
         {
             if (Time.time - lastShootTime > kShootInterval)
             {
                 lastShootTime = Time.time;
                 Shoot();
+                GetComponent<Animator>().ResetTrigger("Attack");
+                GetComponent<Animator>().SetTrigger("Attack");
             }
         }
         input.ConsumeFrame();
@@ -40,10 +33,16 @@ public class ShootBehaviour : IManualBehaviour
 
     void Shoot()
     {
+        StartCoroutine(GenerateBullet());
+    }
+    IEnumerator GenerateBullet()
+    {
+        yield return new WaitForSeconds(0.25f);
         Vector3 bulletPosition = transform.position;
-        Bounds bounds = GetComponent<Renderer>().bounds;
-        bulletPosition.x += (direction == Direction.Right ? 1 : -1) * bounds.size.x;
-        bulletPosition.y += bounds.size.y / 2;
+        Collider2D collider = GetComponent<Collider2D>();
+        Vector2 colliderSize = collider.bounds.size;
+        bulletPosition.x += direction == Direction.Right ? colliderSize.x / 2 + 0.8f : -colliderSize.x / 2 - 0.8f;
+        bulletPosition.y += colliderSize.y / 2;
         float rotateAngle = direction == Direction.Right ? -90 : 90;
         Instantiate(Resources.Load("Prefabs/Bullet"), bulletPosition, Quaternion.Euler(0, 0, rotateAngle));
     }

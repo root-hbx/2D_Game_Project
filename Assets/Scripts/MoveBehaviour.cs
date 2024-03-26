@@ -5,7 +5,8 @@ using UnityEngine.Assertions;
 
 public class MoveBehaviour : IManualBehaviour
 {
-    HeroAnim heroAnim;
+    private bool isJumping = false;
+    Animator animator;
     GameObject indicator;
     Rigidbody2D rigidBody;
 
@@ -24,8 +25,8 @@ public class MoveBehaviour : IManualBehaviour
 
     void Start()
     {
-        heroAnim = GetComponent<HeroAnim>();
-        Assert.IsNotNull(heroAnim, "HeroAnim not found");
+        animator = GetComponent<Animator>();
+        Assert.IsNotNull(animator, "Animator not found");
         rigidBody = GetComponent<Rigidbody2D>();
         Assert.IsNotNull(rigidBody, "Rigidbody2D not found");
     }
@@ -40,7 +41,7 @@ public class MoveBehaviour : IManualBehaviour
         input.ConsumeFrame();
         if (indicator != null)
         {
-            indicator.transform.position = transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0);
+            indicator.transform.position = transform.position + new Vector3(0, GetComponent<Collider2D>().bounds.size.y + 1, 0);
         }
     }
 
@@ -50,24 +51,30 @@ public class MoveBehaviour : IManualBehaviour
         if (input.GetKey(InputKey.A))
         {
             moveDir = -1;
-            heroAnim.FlipX = true;
+            var transform = GetComponent<Transform>();
+            transform.localScale = new Vector3(1, 1, 1) * transform.localScale.y;
         }
         else if (input.GetKey(InputKey.D))
         {
             moveDir = 1;
-            heroAnim.FlipX = false;
+            var transform = GetComponent<Transform>();
+            transform.localScale = new Vector3(-1, 1, 1) * transform.localScale.y;
         }
         else
         {
-            heroAnim.IsRunning = false;
+            animator.SetBool("isRunning", false);
         }
 
         rigidBody.velocity = new Vector2(moveDir * kMaxMoveSpeed, rigidBody.velocity.y);
         if (moveDir != 0)
         {
-            if (!heroAnim.IsJumping)
+            if (isJumping == false)
             {
-                heroAnim.IsRunning = true;
+                animator.SetBool("isRunning", true);
+            } 
+            else
+            {
+                animator.SetBool("isRunning", false);
             }
         }
     }
@@ -78,7 +85,7 @@ public class MoveBehaviour : IManualBehaviour
         {
             if (lastJumpTime + kConsumeTime < Time.time && Time.time < lastGroundTime + kCoyoteTime)
             {
-                heroAnim.IsJumping = true;
+                isJumping = true;
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
                 StartCoroutine(nameof(StopJumpAnime));
             }
@@ -92,7 +99,7 @@ public class MoveBehaviour : IManualBehaviour
         {
             yield return new WaitForEndOfFrame();
         }
-        heroAnim.IsJumping = false;
+        isJumping = false;
     }
 
     void BetterJump()
@@ -122,7 +129,18 @@ public class MoveBehaviour : IManualBehaviour
     public void AddIndicator()
     {
         indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
-            transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
+            transform.position + new Vector3(0, GetComponent<Collider2D>().bounds.size.y + 1, 0),
             Quaternion.identity, transform);
+    }
+    public void Die()
+    {
+        Destroy(indicator);
+        animator.SetTrigger("Die");
+        StartCoroutine(DestroyGameObject());
+    }
+    IEnumerator DestroyGameObject()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(gameObject);
     }
 }
