@@ -18,5 +18,7 @@ public class HeroSpawn : MonoBehaviour
             heroPosition = initHeroPosition;
         }
         Instantiate(Resources.Load("Prefabs/Hero"), heroPosition, Quaternion.identity);
+        AudioManager audioManager = FindObjectOfType<AudioManager>();
+        audioManager.Play(AudioManager.AudioList.bgmForDict, true);
     }
 }

@@ -62,6 +62,7 @@ public class IterationManager : IManualBehaviour
         }
         iterationSwitchUI.ShowLevelName(levelName);
         LoadIteration();
+        audioManager.Play(AudioManager.AudioList.bgmForPlaying, true);
     }
 
     public override void ManualUpdate()
@@ -102,11 +103,11 @@ public class IterationManager : IManualBehaviour
             levelCompleted = true;
             IterationCompleted();
             iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.NextLevel);
+            audioManager.Play(AudioManager.AudioList.bgmWin, false);
             return;
         }
 
         currentIteration++;
-        audioManager.Play(AudioManager.AudioList.bgmWin, false);
         IterationCompleted();
         iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Pass);
     }
@@ -117,7 +118,6 @@ public class IterationManager : IManualBehaviour
         {
             return;
         }
-        audioManager.Play(AudioManager.AudioList.bgmFail, false);
         IterationCompleted();
         iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.GameOver);
     }
@@ -241,7 +241,6 @@ public class IterationManager : IManualBehaviour
         UpdateCharacterMoveState(false);
 
         Instantiate(Resources.Load<GameObject>("Prefabs/Destination"), destinationPosition, Quaternion.identity);
-        audioManager.Play(AudioManager.AudioList.bgmForPlaying, true);
         started = false;
     }
 
