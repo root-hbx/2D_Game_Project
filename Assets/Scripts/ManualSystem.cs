@@ -10,6 +10,7 @@ public abstract class IManualBehaviour : MonoBehaviour, IComparable
 
     public void Awake()
     {
+        Debug.Assert(ManualSystem.instance != null, "ManualSystem.instance not found when add " + this);
         ManualSystem.instance.Add(this);
     }
 

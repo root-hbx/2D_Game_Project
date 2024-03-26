@@ -543,6 +543,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cd19a28263814d399ff8cc9ceccd652, type: 3}
+--- !u!1 &497218183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 497218185}
+  - component: {fileID: 497218184}
+  m_Layer: 0
+  m_Name: Manual Physics System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &497218184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497218183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd07a557581874db29a7f83009538729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &497218185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497218183}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &508125397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41061,6 +41105,7 @@ MonoBehaviour:
   - {x: -30, y: -15, z: 0}
   destinationPosition: {x: 30, y: 15.5, z: 0}
   levelName: 
+  allowAliceShoot: 1
 --- !u!1001 &2114047606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41166,3 +41211,4 @@ SceneRoots:
   - {fileID: 508125397}
   - {fileID: 1977435704}
   - {fileID: 1800861483}
+  - {fileID: 497218185}
