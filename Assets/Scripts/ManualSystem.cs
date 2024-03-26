@@ -47,7 +47,7 @@ public class ManualSystem : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         lock (lockScriptsToAdd)
         {
