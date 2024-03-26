@@ -74,3 +74,4 @@ crashlytics-build.properties
 .vscode
 .DS_Store
 .vsconfig
+webgl_build
