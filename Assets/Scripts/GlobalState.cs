@@ -13,8 +13,9 @@ public class GlobalState : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetConfig()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 61;
         Time.fixedDeltaTime = 1f / 60f;
+        
     }
 
     void Awake()
