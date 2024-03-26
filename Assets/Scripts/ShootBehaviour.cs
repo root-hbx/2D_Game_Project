@@ -38,7 +38,7 @@ public class ShootBehaviour : IManualBehaviour
 
     IEnumerator GenerateBullet()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.08f);
         Vector3 bulletPosition = transform.position;
         Collider2D collider = GetComponent<Collider2D>();
         Vector2 colliderSize = collider.bounds.size;
