@@ -21,6 +21,8 @@ public class MoveBehaviour : IManualBehaviour
     float lastGroundTime = 0;
     float lastJumpTime = 0;
 
+    private bool isDead = false;
+
     bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
     void Start()
@@ -33,6 +35,10 @@ public class MoveBehaviour : IManualBehaviour
 
     public override void ManualUpdate()
     {
+        if (isDead)
+        {
+            return;
+        }
         UpdateMovement();
         UpdateJump();
         BetterJump();
@@ -68,14 +74,7 @@ public class MoveBehaviour : IManualBehaviour
         rigidBody.velocity = new Vector2(moveDir * kMaxMoveSpeed, rigidBody.velocity.y);
         if (moveDir != 0)
         {
-            if (isJumping == false)
-            {
-                animator.SetBool("isRunning", true);
-            } 
-            else
-            {
-                animator.SetBool("isRunning", false);
-            }
+            animator.SetBool("isRunning", !isJumping);
         }
     }
 
@@ -137,6 +136,7 @@ public class MoveBehaviour : IManualBehaviour
         Destroy(indicator);
         animator.SetTrigger("Die");
         StartCoroutine(DestroyGameObject());
+        isDead = true;
     }
     IEnumerator DestroyGameObject()
     {
