@@ -35,6 +35,7 @@ public class ShootBehaviour : IManualBehaviour
     {
         StartCoroutine(GenerateBullet());
     }
+
     IEnumerator GenerateBullet()
     {
         yield return new WaitForSeconds(0.25f);
@@ -43,6 +44,14 @@ public class ShootBehaviour : IManualBehaviour
         Vector2 colliderSize = collider.bounds.size;
         bulletPosition.x += direction == Direction.Right ? colliderSize.x / 2 + 0.8f : -colliderSize.x / 2 - 0.8f;
         bulletPosition.y += colliderSize.y / 2;
+
+        // detect if there is a wall at bulletPosition
+        RaycastHit2D hit = Physics2D.Linecast(bulletPosition, transform.position, 1 << LayerMask.NameToLayer("Wall"));
+        if (hit.collider != null)
+        {
+            yield break;
+        }
+
         float rotateAngle = direction == Direction.Right ? -90 : 90;
         Instantiate(Resources.Load("Prefabs/Bullet"), bulletPosition, Quaternion.Euler(0, 0, rotateAngle));
     }
