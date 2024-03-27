@@ -17,19 +17,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        
         audioSource = gameObject.AddComponent<AudioSource>();
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-
     }
 
     public void Play(AudioList name, bool isLoop)

@@ -99,6 +99,7 @@ public class IterationManager : IManualBehaviour
 
         if (currentIteration == iterations)
         {
+            FindObjectOfType<SpeedrunRecorder>().Complete();
             levelCompleted = true;
             IterationCompleted();
             iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.NextLevel);
