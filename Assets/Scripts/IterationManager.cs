@@ -248,7 +248,8 @@ public class IterationManager : IManualBehaviour
         Instantiate(Resources.Load<GameObject>("Prefabs/Destination"), destinationPosition, Quaternion.identity);
         started = false;
 
-        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
+        if (!levelCompleted)
+            iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
     }
 
     void StartIteration()
