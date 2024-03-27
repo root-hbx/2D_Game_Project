@@ -144,30 +144,32 @@ public class IterationManager : IManualBehaviour
     {
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
-        // PlayDisappearingAnimation();
+        StopRunningAnim();
         StartCoroutine(DelayBeforeRemoveObjects());
     }
 
-    // void PlayDisappearingAnimation()
-    // {
-    //     var heroes = GameObject.FindGameObjectsWithTag("Hero");
-    //     foreach (var hero in heroes)
-    //     {
-    //         hero.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-    //         hero.GetComponent<Animator>().SetTrigger("Disappear");
-    //     }
+    void StopRunningAnim()
+    {
+        var heroes = GameObject.FindGameObjectsWithTag("Hero");
+        foreach (var hero in heroes)
+        {
+            hero.GetComponent<Rigidbody2D>().velocity = new Vector2(0, hero.GetComponent<Rigidbody2D>().velocity.y);
+            hero.GetComponent<Animator>().SetBool("isRunning", false);
+        }
 
-    //     var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-    //     foreach (var enemy in enemies)
-    //     {
-    //         enemy.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-    //         enemy.GetComponent<Animator>().SetTrigger("Disappear");
-    //     }
-    // }
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Rigidbody2D>().velocity = new Vector2(0, enemy.GetComponent<Rigidbody2D>().velocity.y);
+            enemy.GetComponent<Animator>().SetBool("isRunning", false);
+        }
+    }
 
     void UpdateCharacterMoveState(bool ableMove)
     {
         var heroes = GameObject.FindGameObjectsWithTag("Hero");
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
         foreach (var hero in heroes)
         {
             hero.GetComponent<MoveBehaviour>().enabled = ableMove;
@@ -177,7 +179,6 @@ public class IterationManager : IManualBehaviour
                 hero.GetComponent<ShootBehaviour>().enabled = false;
         }
 
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
             enemy.GetComponent<MoveBehaviour>().enabled = ableMove;
