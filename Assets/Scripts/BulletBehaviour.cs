@@ -30,6 +30,9 @@ public class BulletBehaviour : IManualBehaviour
         {
             Debug.Log("Enemy hit by bullet");
             other.gameObject.GetComponent<MoveBehaviour>().Die();
+            other.gameObject.GetComponent<ShootBehaviour>().enabled = false;
+            other.gameObject.GetComponent<MoveBehaviour>().enabled = false;
+
             return;
         }
 
