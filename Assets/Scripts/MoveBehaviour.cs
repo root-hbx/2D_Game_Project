@@ -21,7 +21,6 @@ public class MoveBehaviour : IManualBehaviour
     float lastGroundTime = 0;
     float lastJumpTime = 0;
 
-    private bool isDead = false;
 
     bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
@@ -35,10 +34,6 @@ public class MoveBehaviour : IManualBehaviour
 
     public override void ManualUpdate()
     {
-        if (isDead)
-        {
-            return;
-        }
         UpdateMovement();
         UpdateJump();
         BetterJump();
@@ -133,14 +128,11 @@ public class MoveBehaviour : IManualBehaviour
     }
     public void Die()
     {
-        Destroy(indicator);
         animator.SetTrigger("Die");
-        StartCoroutine(DestroyGameObject());
-        isDead = true;
-    }
-    IEnumerator DestroyGameObject()
-    {
-        yield return new WaitForSeconds(0.5f);
-        Destroy(gameObject);
+        var collider = GetComponent<Collider2D>();
+        var layerMask = collider.excludeLayers;
+        layerMask = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Wall");
+        collider.includeLayers = layerMask;
+        rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
     }
 }
