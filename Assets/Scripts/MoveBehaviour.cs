@@ -82,7 +82,10 @@ public class MoveBehaviour : IManualBehaviour
             {
                 isJumping = true;
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
-                GetComponent<HeroSound>().Play(HeroSound.SoundList.JUMP);
+                if (input is ActualInput)
+                {
+                    GetComponent<HeroSound>().Play(HeroSound.SoundList.JUMP);
+                }
                 StartCoroutine(nameof(StopJumpAnime));
             }
         }
@@ -137,8 +140,7 @@ public class MoveBehaviour : IManualBehaviour
     {
         animator.SetTrigger("Die");
         var collider = GetComponent<Collider2D>();
-        var layerMask = collider.excludeLayers;
-        layerMask = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Wall");
+        LayerMask layerMask = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Wall");
         collider.includeLayers = layerMask;
         rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
     }

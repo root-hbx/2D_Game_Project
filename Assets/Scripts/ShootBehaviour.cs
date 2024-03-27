@@ -34,7 +34,10 @@ public class ShootBehaviour : IManualBehaviour
     void Shoot()
     {
         StartCoroutine(GenerateBullet());
-        GetComponent<HeroSound>().Play(HeroSound.SoundList.SHOOT);
+        if (input is ActualInput)
+        {
+            GetComponent<HeroSound>().Play(HeroSound.SoundList.SHOOT);
+        }
     }
 
     IEnumerator GenerateBullet()
