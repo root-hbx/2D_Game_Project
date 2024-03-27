@@ -340,7 +340,7 @@ MonoBehaviour:
   - {x: 25, y: 12.5, z: 0}
   - {x: 25, y: 12.5, z: 0}
   destinationPosition: {x: 0, y: -8.37, z: 0}
-  levelName: 
+  levelName: Level 2
   allowAliceShoot: 1
 --- !u!4 &920695626
 Transform:

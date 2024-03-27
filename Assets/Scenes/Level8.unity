@@ -41398,7 +41398,7 @@ MonoBehaviour:
   - {x: -30, y: -10, z: 0}
   - {x: -30, y: -15, z: 0}
   destinationPosition: {x: 30, y: 15.5, z: 0}
-  levelName: 
+  levelName: Level 8
   allowAliceShoot: 1
 --- !u!1001 &2114047606
 PrefabInstance:
