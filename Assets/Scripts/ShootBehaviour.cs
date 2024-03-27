@@ -46,9 +46,12 @@ public class ShootBehaviour : IManualBehaviour
         bulletPosition.y += colliderSize.y / 2;
 
         // detect if there is a wall at bulletPosition
-        RaycastHit2D hit = Physics2D.Linecast(bulletPosition, transform.position, 1 << LayerMask.NameToLayer("Wall"));
+        RaycastHit2D hit = Physics2D.Linecast(bulletPosition,
+            new Vector3(transform.position.x, bulletPosition.y, bulletPosition.z),
+            (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Wall")));
         if (hit.collider != null)
         {
+            Debug.Log("Wall detected" + hit.collider.gameObject.name);
             yield break;
         }
 
