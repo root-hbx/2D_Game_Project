@@ -126,9 +126,9 @@ public class IterationManager : IManualBehaviour
     }
     #endregion
 
-    IEnumerator DelayBeforeRemoveObjects()
+    IEnumerator DelayBeforeRemoveObjects(float delay)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(delay);
         timeLimitBar.Reset();
         foreach (var spikeBlock in GameObject.FindGameObjectsWithTag("SpikeBlock"))
         {
@@ -140,12 +140,12 @@ public class IterationManager : IManualBehaviour
         LoadIteration();
     }
 
-    void IterationCompleted()
+    void IterationCompleted(bool isUndo = false)
     {
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
         StopRunningAnim();
-        StartCoroutine(DelayBeforeRemoveObjects());
+        StartCoroutine(DelayBeforeRemoveObjects(isUndo ? 1f : 1f));
     }
 
     void StopRunningAnim()
@@ -271,7 +271,7 @@ public class IterationManager : IManualBehaviour
     {
         if (started)
         {
-            IterationCompleted();
+            IterationCompleted(true);
             if (levelCompleted)
             {
                 iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.NextLevel);
