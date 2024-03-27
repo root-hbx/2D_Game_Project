@@ -6,8 +6,9 @@ using UnityEngine.Assertions;
 
 public class IterationSwitchUI : MonoBehaviour
 {
-    TMP_Text text;
+    TMP_Text hintText;
     TMP_Text levelNameText;
+    TMP_Text passOrFailText;
 
     public enum MessageType
     {
@@ -22,47 +23,59 @@ public class IterationSwitchUI : MonoBehaviour
     {
         var texts = GetComponentsInChildren<TMP_Text>();
         Assert.IsNotNull(texts, "Text not found");
-        Assert.IsTrue(texts.Length == 2, "Texts not set correctly");
-        text = texts[0];
+        Assert.IsTrue(texts.Length == 3, "Texts not set correctly");
+        hintText = texts[0];
         levelNameText = texts[1];
-        text.gameObject.SetActive(false);
+        passOrFailText = texts[2];
+        hintText.gameObject.SetActive(false);
     }
 
     public void ShowContent(MessageType messageType)
     {
-        text.gameObject.SetActive(true);
         switch (messageType)
         {
             case MessageType.Start:
-                text.text = "Press Any Key to start";
+                passOrFailText.gameObject.SetActive(false);
+                hintText.gameObject.SetActive(true);
+                hintText.text = "Press Any Key to start";
                 break;
             case MessageType.Pass:
-                text.text = "Passed! Press Any Key to Continue";
+                passOrFailText.gameObject.SetActive(true);
+                passOrFailText.text = "Passed";
+                passOrFailText.color = Color.green;
                 break;
             case MessageType.GameOver:
-                text.text = "Failed! Press Any Key to Restart";
+                passOrFailText.gameObject.SetActive(true);
+                passOrFailText.text = "Failed";
+                passOrFailText.color = Color.red;
                 break;
             case MessageType.Undo:
-                text.text = "Iter Undo. Press Any Key to Continue";
+                passOrFailText.gameObject.SetActive(true);
+                passOrFailText.text = "Iter Undo";
+                passOrFailText.color = Color.yellow;
                 break;
             case MessageType.NextLevel:
-                text.text = "Congratulation! All Iterations Completed.\n Press Any Key to Watch Replay. Press B to go back to menu.";
+                hintText.gameObject.SetActive(true);
+                hintText.text = "All Iterations Completed.\n Press Any Key to Watch Replay. Press B to go back to menu.";
+                passOrFailText.gameObject.SetActive(true);
+                passOrFailText.text = "Congratulation";
+                passOrFailText.color = Color.green;
                 break;
         }
     }
 
     public void ShowContent(string message)
     {
-        text.gameObject.SetActive(true);
-        text.text = message;
+        hintText.gameObject.SetActive(true);
+        hintText.text = message;
     }
 
     public void StopShowContent()
     {
-        text.gameObject.SetActive(false);
+        hintText.gameObject.SetActive(false);
     }
 
-    IEnumerator StopShowLevelName()
+    IEnumerator StopShowLevelName(TMP_Text text)
     {
         float fadeDuration = 1f; // Duration of the fade in seconds
         float elapsedTime = 0f;
@@ -72,17 +85,17 @@ public class IterationSwitchUI : MonoBehaviour
         while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;
-            levelNameText.color = Color.Lerp(startColor, endColor, elapsedTime / fadeDuration);
+            text.color = Color.Lerp(startColor, endColor, elapsedTime / fadeDuration);
             yield return null;
         }
 
-        levelNameText.gameObject.SetActive(false);
+        text.gameObject.SetActive(false);
     }
 
     public void ShowLevelName(string levelName)
     {
         levelNameText.gameObject.SetActive(true);
         levelNameText.text = levelName;
-        StartCoroutine(StopShowLevelName());
+        StartCoroutine(StopShowLevelName(levelNameText));
     }
 }

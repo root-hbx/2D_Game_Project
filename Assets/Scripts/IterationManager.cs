@@ -66,7 +66,10 @@ public class IterationManager : IManualBehaviour
 
     public override void ManualUpdate()
     {
-        if (Input.anyKey && !(Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.JoystickButton3) || Input.GetKey(KeyCode.B)))
+    }
+    void Update()
+    {
+        if (Input.anyKeyDown && !(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.B)))
         {
             StartIteration();
         }
@@ -242,6 +245,8 @@ public class IterationManager : IManualBehaviour
 
         Instantiate(Resources.Load<GameObject>("Prefabs/Destination"), destinationPosition, Quaternion.identity);
         started = false;
+
+        iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
     }
 
     void StartIteration()
