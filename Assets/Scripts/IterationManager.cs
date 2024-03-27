@@ -221,6 +221,7 @@ public class IterationManager : IManualBehaviour
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponentInChildren<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             aiHero.GetComponentInChildren<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            audioManager.Play(AudioManager.AudioList.bgmForPlaying, true);
         }
         else if (IsHeroIteration)
         {
