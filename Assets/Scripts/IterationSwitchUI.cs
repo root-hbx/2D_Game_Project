@@ -51,7 +51,7 @@ public class IterationSwitchUI : MonoBehaviour
                 break;
             case MessageType.Undo:
                 passOrFailText.gameObject.SetActive(true);
-                passOrFailText.text = "Iter Undo";
+                passOrFailText.text = "Iter Undoing...";
                 passOrFailText.color = Color.yellow;
                 break;
             case MessageType.NextLevel:
