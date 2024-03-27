@@ -66,7 +66,7 @@ public class IterationManager : IManualBehaviour
 
     public override void ManualUpdate()
     {
-        if (Input.anyKeyDown && !(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.B)))
+        if (Input.anyKey && !(Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.JoystickButton3) || Input.GetKey(KeyCode.B)))
         {
             StartIteration();
         }
@@ -125,7 +125,7 @@ public class IterationManager : IManualBehaviour
 
     IEnumerator DelayBeforeRemoveObjects()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         timeLimitBar.Reset();
         foreach (var spikeBlock in GameObject.FindGameObjectsWithTag("SpikeBlock"))
         {
