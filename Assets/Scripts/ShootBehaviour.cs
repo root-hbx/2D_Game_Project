@@ -34,6 +34,7 @@ public class ShootBehaviour : IManualBehaviour
     void Shoot()
     {
         StartCoroutine(GenerateBullet());
+        GetComponent<HeroSound>().Play(HeroSound.SoundList.SHOOT);
     }
 
     IEnumerator GenerateBullet()

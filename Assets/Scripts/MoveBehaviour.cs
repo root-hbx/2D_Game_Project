@@ -81,6 +81,7 @@ public class MoveBehaviour : IManualBehaviour
             {
                 isJumping = true;
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
+                GetComponent<HeroSound>().Play(HeroSound.SoundList.JUMP);
                 StartCoroutine(nameof(StopJumpAnime));
             }
         }
