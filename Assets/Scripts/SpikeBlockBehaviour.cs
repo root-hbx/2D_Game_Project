@@ -51,6 +51,7 @@ public class SpikeBlockBehaviour : IManualBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Kill(other);
+            Destroy(other.gameObject);
             return;
         }
 

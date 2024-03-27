@@ -30,6 +30,7 @@ public class BulletBehaviour : IManualBehaviour
         {
             Debug.Log("Enemy hit by bullet");
             Kill(other);
+            Destroy(other.gameObject);
             return;
         }
 
