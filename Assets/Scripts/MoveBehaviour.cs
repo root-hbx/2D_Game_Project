@@ -16,6 +16,7 @@ public class MoveBehaviour : IManualBehaviour
     const float kJumpForce = 37.0f;     // Each deep jump is 7 units high
     const float kFallMultiplier = 8f;
     const float kLowJumpMultiplier = 10f;
+    const float kMaxFallSpeed = -60f;
     const float kCoyoteTime = 0.15f;
     const float kConsumeTime = 0.05f;
     float lastGroundTime = 0;
@@ -106,6 +107,11 @@ public class MoveBehaviour : IManualBehaviour
         else if (rigidBody.velocity.y > 0 && !input.GetKey(InputKey.W))
         {
             rigidBody.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
+        }
+        // limit the max fall speed
+        if (rigidBody.velocity.y < kMaxFallSpeed)
+        {
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, kMaxFallSpeed);
         }
     }
 
