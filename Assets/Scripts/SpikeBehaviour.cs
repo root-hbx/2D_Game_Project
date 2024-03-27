@@ -8,12 +8,14 @@ public class SpikeBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
+            other.gameObject.GetComponent<MoveBehaviour>().Die();
             Destroy(other.gameObject);
             return;
         }
 
         if (other.gameObject.CompareTag("Hero"))
         {
+            other.gameObject.GetComponent<MoveBehaviour>().Die();
             var iterationManager = FindObjectOfType<IterationManager>();
             if (iterationManager.IsHeroIteration)
             {
