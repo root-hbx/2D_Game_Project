@@ -29,16 +29,13 @@ public class BulletBehaviour : IManualBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Enemy hit by bullet");
-            other.gameObject.GetComponent<MoveBehaviour>().Die();
-            other.gameObject.GetComponent<ShootBehaviour>().enabled = false;
-            other.gameObject.GetComponent<MoveBehaviour>().enabled = false;
-
+            Kill(other);
             return;
         }
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            other.gameObject.GetComponent<MoveBehaviour>().Die();
+            Kill(other);
             if (SceneManager.GetActiveScene().name != "Directory")
             {
                 var iterationManager = FindObjectOfType<IterationManager>();
@@ -50,6 +47,15 @@ public class BulletBehaviour : IManualBehaviour
                 {
                     iterationManager.NextIteration();
                 }
+            }
+        }
+        static void Kill(Collision2D other)
+        {
+            if (other.gameObject.GetComponent<MoveBehaviour>().enabled)
+            {
+                other.gameObject.GetComponent<MoveBehaviour>().Die();
+                other.gameObject.GetComponent<ShootBehaviour>().enabled = false;
+                other.gameObject.GetComponent<MoveBehaviour>().enabled = false;
             }
         }
     }

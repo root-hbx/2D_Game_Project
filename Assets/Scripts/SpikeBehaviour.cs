@@ -8,14 +8,13 @@ public class SpikeBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<MoveBehaviour>().Die();
-            Destroy(other.gameObject);
+            Kill(other);
             return;
         }
 
         if (other.gameObject.CompareTag("Hero"))
         {
-            other.gameObject.GetComponent<MoveBehaviour>().Die();
+            Kill(other);
             var iterationManager = FindObjectOfType<IterationManager>();
             if (iterationManager.IsHeroIteration)
             {
@@ -25,6 +24,15 @@ public class SpikeBehaviour : MonoBehaviour
             {
                 iterationManager.NextIteration();
             }
+        }
+    }
+    static void Kill(Collision2D other)
+    {
+        if (other.gameObject.GetComponent<MoveBehaviour>().enabled)
+        {
+            other.gameObject.GetComponent<MoveBehaviour>().Die();
+            other.gameObject.GetComponent<ShootBehaviour>().enabled = false;
+            other.gameObject.GetComponent<MoveBehaviour>().enabled = false;
         }
     }
 }
