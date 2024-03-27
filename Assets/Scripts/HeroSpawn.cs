@@ -33,7 +33,7 @@ public class HeroSpawn : MonoBehaviour
         if (!VerifyName(heroName))
         {
             var hint = GameObject.Find("/Name Input Convas/Name Input Panel/Hint").GetComponent<TMP_Text>();
-            hint.text = "The name must be less than or equal to 10 characters and can only contains letters and numbers";
+            hint.text = "The name must be less than 20 characters and can only contains letters and numbers";
             return;
         }
 
@@ -48,7 +48,7 @@ public class HeroSpawn : MonoBehaviour
     // - It can only contains letters and numbers
     bool VerifyName(string name)
     {
-        if (name.Length > 10 || name.Length == 0)
+        if (name.Length >= 20 || name.Length == 0)
         {
             return false;
         }

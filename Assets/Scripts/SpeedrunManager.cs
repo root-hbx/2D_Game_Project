@@ -20,7 +20,7 @@ public class SpeedrunManager : MonoBehaviour
 
     public bool nameInputed;
     public string player;
-    public int level;
+    public int level = 0;
 
     void Awake()
     {
@@ -39,6 +39,10 @@ public class SpeedrunManager : MonoBehaviour
     public void Record(int time)
     {
         if (player == null || player == "")
+        {
+            return;
+        }
+        if (level == 0)
         {
             return;
         }

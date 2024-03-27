@@ -23,8 +23,11 @@ public class LevelTransition : MonoBehaviour
     void LoadNextScene()
     {
         GlobalState.instance.heroPosition = GameObject.FindGameObjectWithTag("Hero").transform.position;
-        var level = int.Parse(Regex.Match(nextSceneName, @"\d+$").Value);
-        SpeedrunManager.instance.level = level;
+        var matched = int.TryParse(Regex.Match(nextSceneName, @"\d+$").Value, out int level);
+        if (matched)
+        {
+            SpeedrunManager.instance.level = level;
+        }
 
         SceneManager.LoadSceneAsync(nextSceneName);
     }
