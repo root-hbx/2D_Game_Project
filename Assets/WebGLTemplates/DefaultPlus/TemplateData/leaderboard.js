@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const levelInput = document.getElementById('levelInput').value;
         const level = parseInt(levelInput);
 
-        if (level >= 1 && level <= 12) {
+        if (level >= 1 && level <= 17) {
             const data = await fetchLeaderboardData(level);
             verifyData(data);
             renderLeaderboard(level, data);
         } else {
-            alert('Please enter a valid level between 1 and 12.');
+            alert('Please enter a valid level between 1 and 17.');
         }
     });
 

@@ -36,24 +36,6 @@
     </div>
   </div>
   <div style="margin: 2rem auto; max-width: {{{WIDTH}}}px;">
-    <p> Build time: {{{
-      function getFormattedDateInUTC8() {
-      // 获取当前日期
-      let now = new Date();
-
-      let utc8Time = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (8 * 3600000));
-
-      let year = utc8Time.getFullYear();
-      let month = (utc8Time.getMonth() + 1).toString().padStart(2, '0'); // 月份是从0开始的
-      let day = utc8Time.getDate().toString().padStart(2, '0');
-      let hours = utc8Time.getHours().toString().padStart(2, '0');
-      let minutes = utc8Time.getMinutes().toString().padStart(2, '0');
-
-      return `${year}-${month}-${day} ${hours}:${minutes} UTC+8`;
-      }
-      getFormattedDateInUTC8();
-      }}}</p>
-    <p>By Null Reference Master Team (Team 2)</p>
     <h2>快速指南</h2>
     <p>A/D: 左右移动</p>
     <p>Space/K/W: 跳跃</p>
@@ -65,7 +47,7 @@
   <div class="leaderboard-container">
     <div class="level-selector">
       <label for="levelInput">Enter Level:</label>
-      <input type="number" id="levelInput" min="1" max="12" value="1">
+      <input type="number" id="levelInput" min="1" max="17" value="1">
       <button id="loadButton">Load</button>
     </div>
     <div class="leaderboard">
