@@ -39,6 +39,9 @@ public class SpeedrunRecorder : MonoBehaviour
         }
 
         completed = true;
-        SpeedrunManager.instance.Record((int)(Time.timeSinceLevelLoad * 1000));
+        if (SpeedrunManager.instance != null)
+        {
+            SpeedrunManager.instance.Record((int)(Time.timeSinceLevelLoad * 1000));
+        }
     }
 }
