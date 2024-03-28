@@ -9,6 +9,7 @@ public class IterationSwitchUI : MonoBehaviour
     TMP_Text hintText;
     TMP_Text levelNameText;
     TMP_Text passOrFailText;
+    TMP_Text goalText;
 
     public enum MessageType
     {
@@ -18,15 +19,21 @@ public class IterationSwitchUI : MonoBehaviour
         Undo,
         NextLevel
     }
+    public enum GoalType
+    {
+        ReachDestination,
+        KillHero,
+    }
 
     void Awake()
     {
         var texts = GetComponentsInChildren<TMP_Text>();
         Assert.IsNotNull(texts, "Text not found");
-        Assert.IsTrue(texts.Length == 3, "Texts not set correctly");
+        Assert.IsTrue(texts.Length >= 4, "Texts not set correctly");
         hintText = texts[0];
         levelNameText = texts[1];
         passOrFailText = texts[2];
+        goalText = texts[3];
         hintText.gameObject.SetActive(false);
     }
 
@@ -62,6 +69,19 @@ public class IterationSwitchUI : MonoBehaviour
                 passOrFailText.gameObject.SetActive(true);
                 passOrFailText.text = "Congratulation";
                 passOrFailText.color = Color.green;
+                break;
+        }
+    }
+
+    public void ShowGoal(GoalType goalType)
+    {
+        switch (goalType)
+        {
+            case GoalType.ReachDestination:
+                goalText.text = "Goal: Reach Cup";
+                break;
+            case GoalType.KillHero:
+                goalText.text = "Goal: Kill Alice";
                 break;
         }
     }

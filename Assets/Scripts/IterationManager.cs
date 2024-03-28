@@ -234,6 +234,7 @@ public class IterationManager : IManualBehaviour
         {
             var hero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             hero.GetComponentInChildren<MoveBehaviour>().AddIndicator();
+            iterationSwitchUI.ShowGoal(IterationSwitchUI.GoalType.ReachDestination);
         }
         else
         {
@@ -242,6 +243,7 @@ public class IterationManager : IManualBehaviour
             var aiHero = Instantiate(Resources.Load<GameObject>("Prefabs/Hero"), heroPosition, Quaternion.identity);
             aiHero.GetComponentInChildren<MoveBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
             aiHero.GetComponentInChildren<ShootBehaviour>().input = new RecordInput(heroActions[heroActions.Count - 1]);
+            iterationSwitchUI.ShowGoal(IterationSwitchUI.GoalType.KillHero);
         }
 
         for (int i = 0; i < (currentIteration + (levelCompleted ? 1 : 0) - 1) / 2; i++)
