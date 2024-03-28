@@ -1,21 +1,9 @@
-# Unity Game Demo (WIP)
+# The Second Persona
 
-## Tasks
-- Art:
-  - [ ] Sound effects
-  - [ ] Music
-  - [ ] Character animations
-  - [ ] Textures for characters
-  - [ ] Textures for maps
-  - [ ] Textures for elements, e.g. traps, triggers, bullets, etc
+A unity2D game. Made by 6 students, for a course.
 
-- Mechanics:
-  - [ ] Optimize jump, move, shoot, etc
-  - [ ] More levels
-  - [ ] More elements, e.g. traps, triggers, etc
+Travel in time and fight with your second persona.
 
-- Code:
-  - [ ] Statistics about time, deads, score, etc
-  - [ ] UI for loading, settings, etc
-  - [ ] pause menu
-  - [ ] rollback to previous checkpoint
+<a href="https://github.com/NullRefMaster/Suicide/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NullRefMaster/Suicide" />
+</a>
