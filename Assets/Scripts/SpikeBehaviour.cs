@@ -9,7 +9,6 @@ public class SpikeBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Kill(other);
-            Destroy(other.gameObject);
             return;
         }
 

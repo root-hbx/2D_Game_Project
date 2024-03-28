@@ -140,8 +140,7 @@ public class MoveBehaviour : IManualBehaviour
     {
         animator.SetTrigger("Die");
         var collider = GetComponent<Collider2D>();
-        LayerMask layerMask = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Wall");
-        collider.includeLayers = layerMask;
+        collider.excludeLayers |= 1 << LayerMask.NameToLayer("Bullet");
         rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
     }
 }
