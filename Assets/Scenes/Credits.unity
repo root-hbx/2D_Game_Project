@@ -403,7 +403,16 @@ MonoBehaviour:
     UVSU (https://dietzribi.itch.io/uvsu)
 
     Pixel
-    Adventure 1 (https://assetstore.unity.com/packages/2d/characters/pixel-adventure-1-155360)'
+    Adventure 1 (https://assetstore.unity.com/packages/2d/characters/pixel-adventure-1-155360)
+
+    Casual
+    Game BGM
+
+    https://assetstore.unity.com/packages/audio/music/casual-game-bgm-5-135943
+
+    SPUM
+
+    https://github.com/soonsoon2/SPUM'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f14d5a977d36e47f7b8cd384fb6b98b6, type: 2}
   m_sharedMaterial: {fileID: 6197965249656983981, guid: f14d5a977d36e47f7b8cd384fb6b98b6, type: 2}
