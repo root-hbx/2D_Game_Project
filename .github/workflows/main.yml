@@ -28,6 +28,11 @@ jobs:
       #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       #   with:
       #     githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Replace key
+        run: |
+          echo ${{ secrets.KEY }} > key.txt
+          sed -i "s/906dafba3cc72263ffb443d8c15fdd73f96d3917aa6ed549454a8f79fe590b35/$(cat key.txt)/g" Assets/Scripts/SpeedrunManager.cs
+          rm key.txt
       - name: Build project
         uses: game-ci/unity-builder@v4
         env:
@@ -36,6 +41,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          allowDirtyBuild: true
       - uses: actions/upload-artifact@v3
         with:
           name: Build

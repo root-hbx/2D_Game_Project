@@ -1,0 +1,83 @@
+/* Header styling */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #007bff;
+    /* Primary color */
+}
+
+/* Container for leaderboard tables */
+.leaderboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for leaderboard tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 600px) {
+    .leaderboard-container {
+        padding: 10px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+}
+
+/* Styling for the input box */
+#levelInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styling for the load button */
+#loadButton {
+    padding: 8px 16px;
+    background-color: #007bff;
+    /* Primary color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Hover effect for the load button */
+#loadButton:hover {
+    background-color: #0056b3;
+    /* Darker shade of primary color */
+}

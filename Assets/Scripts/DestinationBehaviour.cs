@@ -1,28 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class DestinationBehaviour : MonoBehaviour
 {
     public Animator animator;
+
     void Start()
     {
         animator = GetComponent<Animator>();
-        Debug.Assert(animator != null, "animator != null");
+        Assert.IsNotNull(animator, "Animator not found");
     }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Hero"))
         {
             animator.SetTrigger("Pressed");
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            var iterationManager = FindObjectOfType<IterationManager>();
+            if (iterationManager.IsHeroIteration)
             {
-                stageManager.NextStage();
+                iterationManager.NextIteration();
             }
             else
             {
-                stageManager.GameOver();
+                iterationManager.GameOver();
             }
         }
     }

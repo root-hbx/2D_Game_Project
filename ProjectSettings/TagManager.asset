@@ -7,6 +7,10 @@ TagManager:
   - Ground
   - Hero
   - Enemy
+  - Bullet
+  - Destination
+  - Portal
+  - SpikeBlock
   layers:
   - Default
   - TransparentFX
@@ -18,8 +22,8 @@ TagManager:
   - Hero
   - Enemy
   - Object
-  - 
-  - 
+  - Wall
+  - Bullet
   - 
   - 
   - 

@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class BulletBehaviour : MonoBehaviour
+public class BulletBehaviour : IManualBehaviour
 {
     const float kMoveSpeed = 20.0f;
 
-    // Update is called once per frame
-    void Update()
+    public override void ManualUpdate()
     {
         transform.Translate(kMoveSpeed * Time.smoothDeltaTime * Vector3.up);
 
@@ -21,17 +21,42 @@ public class BulletBehaviour : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("Bullet")) return;
+        if (other.gameObject.CompareTag("Portal")) return;
+
         Destroy(gameObject);
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Enemy hit by bullet");
+            Kill(other);
+            // Destroy(other.gameObject);
+            return;
+        }
+
         if (other.gameObject.CompareTag("Hero"))
         {
-            var stageManager = FindObjectOfType<StageManager>();
-            if (stageManager.IsHeroStage)
+            Kill(other);
+            if (SceneManager.GetActiveScene().name != "Directory")
             {
-                stageManager.GameOver();
+                var iterationManager = FindObjectOfType<IterationManager>();
+                if (iterationManager.IsHeroIteration)
+                {
+                    iterationManager.GameOver();
+                }
+                else
+                {
+                    iterationManager.NextIteration();
+                }
             }
-            else
+        }
+        static void Kill(Collision2D other)
+        {
+            if (other.gameObject.GetComponent<MoveBehaviour>().enabled)
             {
-                stageManager.NextStage();
+                other.gameObject.GetComponent<MoveBehaviour>().Die();
+                other.gameObject.GetComponent<ShootBehaviour>().enabled = false;
+                other.gameObject.GetComponent<MoveBehaviour>().enabled = false;
             }
         }
     }

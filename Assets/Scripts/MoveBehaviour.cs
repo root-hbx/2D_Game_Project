@@ -1,59 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class MoveBehaviour : MonoBehaviour
+public class MoveBehaviour : IManualBehaviour
 {
+    private bool isJumping = false;
+    Animator animator;
+    GameObject indicator;
+    Rigidbody2D rigidBody;
+
     public IInput input = new ActualInput();
-    private HeroAnim heroAnim;
-    private GameObject indicator;
 
-    const float kMoveAcceleration = 100.0f;
     const float kMaxMoveSpeed = 10.0f;
-    const float kJumpForce = 30.0f;
-
-    Rigidbody2D rb;
+    const float kJumpForce = 37.0f;     // Each deep jump is 7 units high
     const float kFallMultiplier = 8f;
     const float kLowJumpMultiplier = 10f;
+    const float kMaxFallSpeed = -60f;
+    const float kCoyoteTime = 0.15f;
+    const float kConsumeTime = 0.05f;
+    float lastGroundTime = 0;
+    float lastJumpTime = 0;
 
-    const float kCoyoteTime = 0.1f;
-    float leftGroundCoyoteTime = 0;
 
-    bool IsGrounded
-    {
-        get
-        {
-            return Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
-        }
-    }
+    bool IsGrounded => Physics2D.OverlapCircle((Vector2)transform.position, 0.25f, 1 << LayerMask.NameToLayer("Ground"));
 
     void Start()
     {
-        heroAnim = GetComponent<HeroAnim>();
-        Debug.Assert(heroAnim != null, "HeroAnim not found");
-        rb = GetComponent<Rigidbody2D>();
-        Debug.Assert(rb != null, "Rigidbody2D not found");
-        if (input is ActualInput)
-        {
-            indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
-            transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0),
-            Quaternion.identity, transform);
-        }
+        animator = GetComponent<Animator>();
+        Assert.IsNotNull(animator, "Animator not found");
+        rigidBody = GetComponent<Rigidbody2D>();
+        Assert.IsNotNull(rigidBody, "Rigidbody2D not found");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ManualUpdate()
     {
         UpdateMovement();
-        BetterMovement();
         UpdateJump();
         BetterJump();
-        UpdateCoyoTime();
+        UpdateGroundTime();
 
         input.ConsumeFrame();
         if (indicator != null)
         {
-            indicator.transform.position = transform.position + new Vector3(0, GetComponent<Renderer>().bounds.size.y + 1, 0);
+            indicator.transform.position = transform.position + new Vector3(0, GetComponent<Collider2D>().bounds.size.y + 1, 0);
         }
     }
 
@@ -63,33 +53,24 @@ public class MoveBehaviour : MonoBehaviour
         if (input.GetKey(InputKey.A))
         {
             moveDir = -1;
-            heroAnim.FlipX = true;
+            var transform = GetComponent<Transform>();
+            transform.localScale = new Vector3(1, 1, 1) * transform.localScale.y;
         }
         else if (input.GetKey(InputKey.D))
         {
             moveDir = 1;
-            heroAnim.FlipX = false;
+            var transform = GetComponent<Transform>();
+            transform.localScale = new Vector3(-1, 1, 1) * transform.localScale.y;
         }
         else
         {
-            heroAnim.IsRuning = false;
+            animator.SetBool("isRunning", false);
         }
 
+        rigidBody.velocity = new Vector2(moveDir * kMaxMoveSpeed, rigidBody.velocity.y);
         if (moveDir != 0)
         {
-            rb.AddForce(new Vector2(moveDir * kMoveAcceleration, 0));
-            if (!heroAnim.IsJumping)
-            {
-                heroAnim.IsRuning = true;
-            }
-        }
-    }
-
-    void BetterMovement()
-    {
-        if (Mathf.Abs(rb.velocity.x) > kMaxMoveSpeed)
-        {
-            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * kMaxMoveSpeed, rb.velocity.y);
+            animator.SetBool("isRunning", !isJumping);
         }
     }
 
@@ -97,11 +78,14 @@ public class MoveBehaviour : MonoBehaviour
     {
         if (input.GetKey(InputKey.W))
         {
-            if (IsGrounded || leftGroundCoyoteTime + kCoyoteTime > Time.time)
+            if (lastJumpTime + kConsumeTime < Time.time && Time.time < lastGroundTime + kCoyoteTime)
             {
-                Debug.Log("Jump");
-                heroAnim.IsJumping = true;
-                rb.velocity = new Vector2(rb.velocity.x, kJumpForce);
+                isJumping = true;
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, kJumpForce);
+                if (input is ActualInput)
+                {
+                    GetComponent<HeroSound>().Play(HeroSound.SoundList.JUMP);
+                }
                 StartCoroutine(nameof(StopJumpAnime));
             }
         }
@@ -110,30 +94,53 @@ public class MoveBehaviour : MonoBehaviour
     IEnumerator StopJumpAnime()
     {
         yield return new WaitForSeconds(0.2f);
-        while (rb.velocity.y > 0)
+        while (rigidBody.velocity.y > 0)
         {
             yield return new WaitForEndOfFrame();
         }
-        heroAnim.IsJumping = false;
+        isJumping = false;
     }
 
     void BetterJump()
     {
-        if (rb.velocity.y < 0)
+        if (rigidBody.velocity.y < 0)
         {
-            rb.velocity += kFallMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kFallMultiplier * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
         }
-        else if (rb.velocity.y > 0 && !input.GetKey(InputKey.W))
+        else if (rigidBody.velocity.y > 0 && !input.GetKey(InputKey.W))
         {
-            rb.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.smoothDeltaTime * Vector2.up;
+            rigidBody.velocity += kLowJumpMultiplier * Physics2D.gravity.y * Time.fixedDeltaTime * Vector2.up;
+        }
+        // limit the max fall speed
+        if (rigidBody.velocity.y < kMaxFallSpeed)
+        {
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, kMaxFallSpeed);
         }
     }
 
-    void UpdateCoyoTime()
+    void UpdateGroundTime()
     {
         if (IsGrounded)
         {
-            leftGroundCoyoteTime = Time.time;
+            lastGroundTime = Time.time;
         }
+        else
+        {
+            lastJumpTime = Time.time;
+        }
+    }
+
+    public void AddIndicator()
+    {
+        indicator = Instantiate(Resources.Load<GameObject>("Prefabs/Indicator"),
+            transform.position + new Vector3(0, GetComponent<Collider2D>().bounds.size.y + 1, 0),
+            Quaternion.identity, transform);
+    }
+    public void Die()
+    {
+        animator.SetTrigger("Die");
+        var collider = GetComponent<Collider2D>();
+        collider.excludeLayers |= 1 << LayerMask.NameToLayer("Bullet");
+        rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
     }
 }
