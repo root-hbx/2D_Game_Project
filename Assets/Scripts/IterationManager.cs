@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class IterationManager : IManualBehaviour
 {
@@ -61,7 +62,7 @@ public class IterationManager : IManualBehaviour
         {
             levelName = "Level ???";
         }
-        iterationSwitchUI.ShowLevelName(levelName);
+        iterationSwitchUI.ShowLevelName(SceneManager.GetActiveScene().name);
         LoadIteration();
         audioManager.Play(AudioManager.AudioList.bgmForPlaying, true);
     }
