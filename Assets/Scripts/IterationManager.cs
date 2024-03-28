@@ -278,7 +278,11 @@ public class IterationManager : IManualBehaviour
 
     void BackIteration()
     {
-        if (IterStarted && !isWaitingDelayBeforeRemoveObjects)
+        if (levelCompleted)
+        {
+            return;
+        }
+        if (IterStarted)
         {
             IterationCompleted(true);
             if (levelCompleted)
