@@ -35,7 +35,8 @@ public class IterationSwitchUI : MonoBehaviour
         switch (messageType)
         {
             case MessageType.Start:
-                passOrFailText.gameObject.SetActive(false);
+                if (passOrFailText.text != "Iter Undo")
+                    passOrFailText.gameObject.SetActive(false);
                 hintText.gameObject.SetActive(true);
                 hintText.text = "Press Any Key to start";
                 break;
@@ -51,8 +52,9 @@ public class IterationSwitchUI : MonoBehaviour
                 break;
             case MessageType.Undo:
                 passOrFailText.gameObject.SetActive(true);
-                passOrFailText.text = "Iter Undoing...";
+                passOrFailText.text = "Iter Undo";
                 passOrFailText.color = Color.yellow;
+                StartCoroutine(StopShowContentLerp(passOrFailText));
                 break;
             case MessageType.NextLevel:
                 hintText.gameObject.SetActive(true);
@@ -75,11 +77,11 @@ public class IterationSwitchUI : MonoBehaviour
         hintText.gameObject.SetActive(false);
     }
 
-    IEnumerator StopShowLevelName(TMP_Text text)
+    IEnumerator StopShowContentLerp(TMP_Text text)
     {
         float fadeDuration = 1f; // Duration of the fade in seconds
         float elapsedTime = 0f;
-        Color startColor = levelNameText.color;
+        Color startColor = text.color;
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f); // Fade out to transparent
 
         while (elapsedTime < fadeDuration)
@@ -96,6 +98,6 @@ public class IterationSwitchUI : MonoBehaviour
     {
         levelNameText.gameObject.SetActive(true);
         levelNameText.text = levelName;
-        StartCoroutine(StopShowLevelName(levelNameText));
+        StartCoroutine(StopShowContentLerp(levelNameText));
     }
 }

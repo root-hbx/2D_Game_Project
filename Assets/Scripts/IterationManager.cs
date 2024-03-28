@@ -12,7 +12,7 @@ public class IterationManager : IManualBehaviour
 
     public AudioManager audioManager;
 
-    bool started;
+    bool IterStarted;
     bool iterationCompleted;
     bool levelCompleted;
 
@@ -28,6 +28,8 @@ public class IterationManager : IManualBehaviour
 
     public string levelName;
     public bool allowAliceShoot = true;
+
+    private bool isWaitingDelayBeforeRemoveObjects = false;
 
     List<List<InputKey>> enemyActions = new();
     List<List<InputKey>> heroActions = new();
@@ -129,6 +131,9 @@ public class IterationManager : IManualBehaviour
     IEnumerator DelayBeforeRemoveObjects(float delay)
     {
         yield return new WaitForSeconds(delay);
+        if (!isWaitingDelayBeforeRemoveObjects)
+            yield break;
+
         timeLimitBar.Reset();
         foreach (var spikeBlock in GameObject.FindGameObjectsWithTag("SpikeBlock"))
         {
@@ -138,14 +143,17 @@ public class IterationManager : IManualBehaviour
             blockManager.Reset();
         RemoveObjects();
         LoadIteration();
+        isWaitingDelayBeforeRemoveObjects = false;
     }
 
     void IterationCompleted(bool isUndo = false)
     {
+        IterStarted = false;
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
         StopRunningAnim();
-        StartCoroutine(DelayBeforeRemoveObjects(isUndo ? 1f : 1f));
+        isWaitingDelayBeforeRemoveObjects = true;
+        StartCoroutine(DelayBeforeRemoveObjects(isUndo ? 0f : 1f));
     }
 
     void StopRunningAnim()
@@ -246,7 +254,7 @@ public class IterationManager : IManualBehaviour
         UpdateCharacterMoveState(false);
 
         Instantiate(Resources.Load<GameObject>("Prefabs/Destination"), destinationPosition, Quaternion.identity);
-        started = false;
+        IterStarted = false;
 
         if (!levelCompleted)
             iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
@@ -254,7 +262,7 @@ public class IterationManager : IManualBehaviour
 
     void StartIteration()
     {
-        if (started)
+        if (IterStarted)
         {
             return;
         }
@@ -263,13 +271,13 @@ public class IterationManager : IManualBehaviour
         UpdateCharacterMoveState(true);
         recordAction.TakeActions();
         iterationCompleted = false;
-        started = true;
+        IterStarted = true;
         Random.InitState(42);
     }
 
     void BackIteration()
     {
-        if (started)
+        if (IterStarted)
         {
             IterationCompleted(true);
             if (levelCompleted)
@@ -278,6 +286,7 @@ public class IterationManager : IManualBehaviour
             }
             else
             {
+                iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Undo);
                 iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Start);
             }
             return;
@@ -291,6 +300,7 @@ public class IterationManager : IManualBehaviour
         if (!levelCompleted)
         {
             currentIteration--;
+            Debug.Log("currentIteration: " + currentIteration);
         }
         levelCompleted = false;
         if (IsHeroIteration)
@@ -302,6 +312,6 @@ public class IterationManager : IManualBehaviour
             enemyActions.RemoveAt(enemyActions.Count - 1);
         }
         iterationSwitchUI.ShowContent(IterationSwitchUI.MessageType.Undo);
-        IterationCompleted();
+        IterationCompleted(true);
     }
 }
