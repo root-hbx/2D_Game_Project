@@ -148,7 +148,6 @@ public class IterationManager : IManualBehaviour
 
     void IterationCompleted(bool isUndo = false)
     {
-        IterStarted = false;
         iterationCompleted = true;
         UpdateCharacterMoveState(false);
         StopRunningAnim();
@@ -277,7 +276,7 @@ public class IterationManager : IManualBehaviour
 
     void BackIteration()
     {
-        if (IterStarted)
+        if (IterStarted && !isWaitingDelayBeforeRemoveObjects)
         {
             IterationCompleted(true);
             if (levelCompleted)
@@ -300,7 +299,6 @@ public class IterationManager : IManualBehaviour
         if (!levelCompleted)
         {
             currentIteration--;
-            Debug.Log("currentIteration: " + currentIteration);
         }
         levelCompleted = false;
         if (IsHeroIteration)
