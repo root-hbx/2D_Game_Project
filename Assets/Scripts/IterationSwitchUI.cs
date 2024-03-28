@@ -65,7 +65,7 @@ public class IterationSwitchUI : MonoBehaviour
                 break;
             case MessageType.NextLevel:
                 hintText.gameObject.SetActive(true);
-                hintText.text = "All Iterations Completed.\n Press Any Key to Watch Replay. Press B to go back to menu.";
+                hintText.text = "Press Any Key to Watch Replay.\n Press B to go back to menu.";
                 passOrFailText.gameObject.SetActive(true);
                 passOrFailText.text = "Congratulation";
                 passOrFailText.color = Color.green;
